@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Inquizition.Models
+﻿namespace Inquizition.Models
 {
     public class EmailKey
     {
