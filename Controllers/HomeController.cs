@@ -20,6 +20,7 @@ namespace Inquizition.Controllers
 
         public IActionResult Index()
         {
+            // Add code to authenticate user and display username if authenticated
             return View();
         }
 

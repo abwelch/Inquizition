@@ -27,7 +27,7 @@ namespace Inquizition.Areas.Identity.Pages.Account
             var msg = new SendGridMessage()
             {
                 From = new EmailAddress("abwelch0@gmail.com", "Inquizition"),
-                Subject = "Inquizition - Email Verification",
+                Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
             };

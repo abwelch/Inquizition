@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inquizition", "Inquizition.csproj", "{127194D4-A72F-47BA-B821-C1003B9D8C35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inquizition", "Inquizition.csproj", "{127194D4-A72F-47BA-B821-C1003B9D8C35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
