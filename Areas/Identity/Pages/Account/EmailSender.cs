@@ -18,7 +18,6 @@ namespace Inquizition.Areas.Identity.Pages.Account
 
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            subject = "Inquizition Registration - Email Confirmation";
             return Execute(Options.SendGridKey, subject, message, email);
         }
 
@@ -28,7 +27,7 @@ namespace Inquizition.Areas.Identity.Pages.Account
             var msg = new SendGridMessage()
             {
                 From = new EmailAddress("abwelch0@gmail.com", "Inquizition"),
-                Subject = subject,
+                Subject = "Inquizition - Email Verification",
                 PlainTextContent = message,
                 HtmlContent = message
             };
