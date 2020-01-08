@@ -1,8 +1,28 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-
+<div class="text-center row">
+    <div class="col-12">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <h2 class="display-4">Welcome back - <span style="color: #00a9ff;">@User.Identity.Name</span>!</h2>
+            <div class="col-12">
+                @if (!UserManager.IsEmailConfirmedAsync(UserManager.FindByNameAsync(User.Identity.Name).Result).Result)
+                {
+                    <span>Verify your email to share content with friends: </span>
+                    <a asp-area="Identity" asp-page="/Account/Manage/Email">verify</a>
+                }
+            </div>
+        }
+        else
+        {
+            <h2 class="display-4">Welcome to Inquizition</h2>
+        }
+    </div>
+    
 </div>

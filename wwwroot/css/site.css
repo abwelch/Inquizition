@@ -9,8 +9,13 @@ a.navbar-brand {
 
 /* Provide sufficient contrast against white background */
 a {
-    color: #1b6ec2;
+    color: #00a9ff;
 }
+
+    a:hover {
+        text-decoration: underline;
+        color: #00a9ff;
+    }
 
 .form-group a {
     color: #00a9ff;
@@ -104,7 +109,7 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
-  background-color: #191919;
+  background-color: #121319;
   color: white;
 }
 
