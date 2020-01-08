@@ -10,12 +10,14 @@
     <div class="col-12">
         @if (User.Identity.IsAuthenticated)
         {
-            <h2 class="display-4">Welcome back - <span style="color: #00a9ff;">@User.Identity.Name</span>!</h2>
+            <h2 class="display-4">Welcome back - <span style="color: lightgreen;">@User.Identity.Name</span>!</h2>
             <div class="col-12">
                 @if (!UserManager.IsEmailConfirmedAsync(UserManager.FindByNameAsync(User.Identity.Name).Result).Result)
                 {
-                    <span>Verify your email to share content with friends: </span>
+                <h5>
+                    Verify your email to share content with friends:
                     <a asp-area="Identity" asp-page="/Account/Manage/Email">verify</a>
+                </h5>
                 }
             </div>
         }
@@ -23,6 +25,7 @@
         {
             <h2 class="display-4">Welcome to Inquizition</h2>
         }
+        <hr />
     </div>
     
 </div>
