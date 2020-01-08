@@ -38,26 +38,10 @@ namespace Inquizition.Areas.Identity.Pages.Account.Manage
         [TempData]
         public string StatusMessage { get; set; }
 
-        [BindProperty]
-        public InputModel Input { get; set; }
-
-        public class InputModel
-        {
-            [Required]
-            [EmailAddress]
-            [Display(Name = "New email")]
-            public string NewEmail { get; set; }
-        }
-
         private async Task LoadAsync(IdentityUser user)
         {
             var email = await _userManager.GetEmailAsync(user);
             Email = email;
-
-            Input = new InputModel
-            {
-                NewEmail = email,
-            };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
         }
