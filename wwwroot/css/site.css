@@ -20,6 +20,7 @@ a {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1b6ec2;
+    transition-duration: 0.4s;
 }
 
 .btn-primary:hover {
@@ -33,6 +34,28 @@ a {
 .btn-link:hover {
     color: #00a9ff;
 }
+
+#logout:hover {
+    text-decoration: underline;
+}
+
+#toggle-boi {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(00,0,0, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+#toggle-button {
+    border-color: black;
+    transition-duration: 0.4s;
+}
+
+#toggle-button:hover {
+    outline: black;
+    border:3px solid black;
+}
+
+    #toggle-button:focus {
+        outline: black;
+    }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
@@ -101,6 +124,10 @@ body {
 #email:hover {
     color: white;
     border: 1px solid white;
+}
+
+#inquiz:hover {
+    text-decoration: underline;
 }
 
 #change-password:hover {
