@@ -12,8 +12,8 @@ a {
     color: #1b6ec2;
 }
 
-a.form-group {
-    color: red;
+.form-group a {
+    color: #00a9ff;
 }
 
 .btn-primary {
@@ -26,6 +26,14 @@ a.form-group {
     border-color: white;
 }
 
+.btn-link {
+    color: #00a9ff;
+}
+
+.btn-link:hover {
+    color: #00a9ff;
+}
+
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
     box-shadow: 0 0 0 0.2rem white;
@@ -34,7 +42,6 @@ a.form-group {
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
-  border-color: #1861ac;
 }
 
 /* Sticky footer styles
@@ -80,6 +87,25 @@ body {
 
 .nav-item:hover {
     text-decoration: underline;
+}
+#email {
+    font-size: large;
+    margin-bottom: 10px;
+}
+
+#change-password {
+    font-size: large;
+    margin-bottom: 10px;
+}
+
+#email:hover {
+    color: white;
+    border: 1px solid white;
+}
+
+#change-password:hover {
+    color: white;
+    border: 1px solid white;
 }
 
 hr {
