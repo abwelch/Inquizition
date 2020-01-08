@@ -26,7 +26,7 @@ namespace Inquizition.Areas.Identity.Pages.Account
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("abwelch0@gmail.com", "Inquizition"),
+                From = new EmailAddress("inquizitionservices@gmail.com", "Inquizition"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
