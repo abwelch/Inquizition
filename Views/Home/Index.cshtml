@@ -11,7 +11,7 @@
         {
             <h2 class="display-4">Welcome back - <span style="color: lightgreen;">@User.Identity.Name</span>!</h2>
             <div class="col-12">
-                @if (!UserManager.IsEmailConfirmedAsync(UserManager.FindByNameAsync(User.Identity.Name).Result).Result)
+                @if (!UserManager.IsEmailConfirmedAsync(UserManager.GetUserAsync(User).Result).Result)
                 {
                 <h5>
                     Verify your email to share content with friends:
