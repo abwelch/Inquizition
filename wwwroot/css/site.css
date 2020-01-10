@@ -21,6 +21,14 @@ a {
     color: #00a9ff;
 }
 
+.dropdown-menu a:hover{
+    background-color: blue;
+}
+
+.dropdown-menu {
+    background-color: white;
+}
+
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
