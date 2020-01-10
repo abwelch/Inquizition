@@ -8,7 +8,7 @@ namespace Inquizition.Models
 {
     public class UserInfo
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         [Required]
         public string Username { get; set; }
         [Required]
