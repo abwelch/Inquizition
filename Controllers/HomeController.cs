@@ -35,12 +35,18 @@ namespace Inquizition.Controllers
                 AuthenticatedUser = _dbContext.UserOverviewInfo.Where(u => u.Username == User.Identity.Name).SingleOrDefault();
                 if (AuthenticatedUser == null)
                 {
+                    // Band-aid fix to bug if cookies keep user logged in but is not identified
+                    var tempUser = _userManager.GetUserAsync(User).Result;
+                    if (tempUser == null)
+                    {
+                        return View();
+                    }
                     AuthenticatedUser = new UserInfo
                     {
                         // Add entry to table
                         Username = User.Identity.Name,
                         IntroCompleted = false,
-                        EmailConfirmed = _userManager.IsEmailConfirmedAsync(_userManager.GetUserAsync(User).Result).Result,
+                        EmailConfirmed = _userManager.IsEmailConfirmedAsync(tempUser).Result,
                         TotalFriends = 0,
                         TotalSets = 0,
                         TotalBookmarks = 0
