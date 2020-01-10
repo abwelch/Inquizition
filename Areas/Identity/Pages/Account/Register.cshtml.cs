@@ -89,7 +89,7 @@ namespace Inquizition.Areas.Identity.Pages.Account
             {
                 // Band-aid fix for unknown error detecting unique emails
                 // that have been sent a registration key
-                if (databaseContext.Registration.Any(e => e.Email == Input.Email))
+                if (databaseContext.AspNetUsers.Any(e => e.Email == Input.Email))
                 {
                     ModelState.AddModelError(string.Empty, "Email is already registered.");
                 }
