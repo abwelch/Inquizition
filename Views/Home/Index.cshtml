@@ -6,25 +6,32 @@
 }
 
 <div class="text-center row">
-    <div class="col-12">
-        @if (User.Identity.IsAuthenticated)
-        {
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="col-12">
             <h2 class="display-4">Welcome back - <span style="color: lightgreen;">@User.Identity.Name</span>!</h2>
-            <div class="col-12">
-                @if (!Model.EmailConfirmed)
-                {
+            <hr />
+        </div>
+        <div class="col-12">
+            @if (!Model.EmailConfirmed)
+            {
                 <h5>
                     Verify your email to share content with friends:
                     <a asp-area="Identity" asp-page="/Account/Manage/Email">verify</a>
                 </h5>
-                }
-            </div>
-        }
-        else
-        {
+            }
+            <!-- Add specific user content like bookmark links or popular.
+            Add link to introduction if they havent completed it-->
+        </div>
+    }
+    else
+    {
+        <div class="col-12">
             <h2 class="display-4">Welcome to Inquizition</h2>
-        }
-        <hr />
-    </div>
-    
+            <hr />
+        </div>
+        <div class="col-12">
+            <h4 class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">Take the Introduction tour</a></h4>
+        </div>
+    }
 </div>

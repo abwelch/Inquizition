@@ -21,8 +21,8 @@ a {
     color: #00a9ff;
 }
 
-.dropdown-menu a:hover{
-    background-color: blue;
+.dropdown-menu a:hover {
+    background-color: #00a9ff;
 }
 
 .dropdown-menu {
