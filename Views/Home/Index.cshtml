@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject UserManager<IdentityUser> UserManager
+@model Inquizition.Models.UserInfo
 
 @{
     ViewData["Title"] = "Home Page";
@@ -11,7 +11,7 @@
         {
             <h2 class="display-4">Welcome back - <span style="color: lightgreen;">@User.Identity.Name</span>!</h2>
             <div class="col-12">
-                @if (!UserManager.IsEmailConfirmedAsync(UserManager.GetUserAsync(User).Result).Result)
+                @if (!Model.EmailConfirmed)
                 {
                 <h5>
                     Verify your email to share content with friends:
