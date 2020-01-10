@@ -1,6 +1,8 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    @using Microsoft.AspNetCore.Identity
+    @inject UserManager<IdentityUser> UserManager
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Inquizition</title>
@@ -10,16 +12,64 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                    <button id="toggle-button" class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span id="toggle-boi" class="navbar-toggler-icon"></span>
-                    </button>
-                    <a id="inquiz" class="navbar-brand d-md-none" asp-controller="Home" asp-action="Index">Inquizition</a>
+            <div class="container-fluid">
+                <button id="toggle-button" class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span id="toggle-boi" class="navbar-toggler-icon"></span>
+                </button>
+                <a id="inquiz" class="navbar-brand d-md-none" asp-controller="Home" asp-action="Index">Inquizition</a>
                 <div class="navbar-collapse collapse d-md-inline-flex">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- Dropdown menu -->
+                            <div class="dropdown show">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Study Sets
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Public</a>
+                                    <div class="dropdown-divider"></div>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a class="dropdown-item" href="#">Manage Existing</a>
+                                    }
+                                    <a class="dropdown-item" href="#">Create</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="dropdown show">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Social
+                                </a>
+                                <div class="dropdown-menu">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a class="dropdown-item" href="#">Friends List</a>
+                                        <a class="dropdown-item" href="#">Messages</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" href="#">Login to access</a>
+                                    }
+
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="dropdown show">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Help
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Basics</a>
+                                    <a class="dropdown-item" href="#">FAQ</a>
+                                    <a class="dropdown-item" href="#">Report Bug</a>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -27,14 +77,14 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container-fluid">
             <p>Inquizition - Developed by Andrew Welch</p>
         </div>
     </footer>
