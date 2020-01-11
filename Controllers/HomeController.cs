@@ -41,15 +41,17 @@ namespace Inquizition.Controllers
                     {
                         return View();
                     }
-                    AuthenticatedUser = new UserInfo
+                    AuthenticatedUser = new UserInfo()
                     {
                         // Add entry to table
                         Username = User.Identity.Name,
-                        IntroCompleted = false,
                         EmailConfirmed = _userManager.IsEmailConfirmedAsync(tempUser).Result,
+                        IntroCompleted = false,
                         TotalFriends = 0,
                         TotalSets = 0,
-                        TotalBookmarks = 0
+                        TotalBookmarks = 0,
+                        ReportedInstances = 0,
+                        Banned = false
                     };
                     _dbContext.UserOverviewInfo.Add(AuthenticatedUser);
                     _dbContext.SaveChanges();
