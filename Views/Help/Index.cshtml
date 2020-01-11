@@ -1,20 +1,149 @@
 ﻿@{
-    ViewData["Title"] = "Introduction";
+    ViewData["Title"] = "Homepage";
 }
+@model Inquizition.Models.UserInfo
 
-<div class="text-center row">
+    <section class="text-left introduction">
+        <header class="row">
+            <div class="col">
+                <h1 class="display-3 text-center">Introduction</h1>
+                <hr />
+            </div>
+        </header>
+        <!-- Band-aid fix for potentially validated user who is not in system -->
+        @if (User.Identity.IsAuthenticated && Model == null)
+        {
+            <article class="row text-center">
+                <div class="col">
+                    <span class="alert alert-danger">@ViewData["helpNullAuthenticatedUser"]</span>
+                    <a asp-controller="Home" asp-action="Index">Return to homepage</a>
+                </div>
+            </article>
+        }
+        else
+        {
+            <article>
+                <header class="row">
+                    <div class="col">
+                        <h4>What is Inquizition?</h4>
+                    </div>
+                </header>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">
+                            Inquizition is a web application that provides functionality to create, view, and
+                            share <strong>Inquizitors</strong>.
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article>
+                <header class="row">
+                    <div class="col">
+                        <h4>What's an Inquizitor?</h4>
+                    </div>
+                </header>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">
+                            <strong>An Inquizitor is a container for storing a specific study tool.</strong>
+                            <br />Three types of study tools are available: Flash Cards, Quizzes, and Two-Column Lists.
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article>
+                <header class="row">
+                    <div class="col">
+                        <h4>Create</h4>
+                    </div>
+                </header>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">
+                            At the foundation of Inquizition is the ability to create Inquizitors.
+                            Users can choose from three templates
+                            Inquizition soley relies upon user contributions to enhance the public content section.
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article>
+                <header class="row">
+                    <div class="col">
+                        <h4>Create</h4>
+                    </div>
+                </header>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">
+                            At the foundation of Inquizition is the ability to create Inquizitors.
+                            Users can choose from three templates
+                            Inquizition soley relies upon user contributions to enhance the public content section.
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article>
+                <header class="row">
+                    <div class="col">
+                        <h4>View</h4>
+                    </div>
+                </header>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">
 
-    <div class="col-12">
-        <h1 class="display-4">Introduction to Inquizition</h1>
-    </div>
-    @if (User.Identity.IsAuthenticated)
-    {
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article>
+                <header class="row">
+                    <div class="col">
+                        <h4>Share</h4>
+                    </div>
+                </header>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">
 
-    }
-    else
-    {
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article>
+                <header class="row">
+                    <div class="col">
+                        <h4>How does it work?</h4>
+                    </div>
+                </header>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">
+                            Users can view/bookmark public Inquizitors or choose to create their own. Once created,
+                            users can elect to make their Inquizitor public, allowing all users to utilize the new
+                            Inquizitor.<br />
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article>
+                <header class="row">
+                    <div class="col">
+                        <h4>Where should I start?</h4>
+                    </div>
+                </header>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">
+                            Inquizition
+                        </p>
+                    </div>
+                </div>
+            </article>
+        }
+    </section>
 
-    }
-</div>
 
-</div>
+
