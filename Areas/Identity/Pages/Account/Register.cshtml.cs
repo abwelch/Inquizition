@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Inquizition.Data;
+using Inquizition.Models;
 
 namespace Inquizition.Areas.Identity.Pages.Account
 {
@@ -60,6 +61,7 @@ namespace Inquizition.Areas.Identity.Pages.Account
 
             [Required]
             [EmailAddress]
+            [StringLength(60, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
@@ -87,6 +89,12 @@ namespace Inquizition.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                if (ProfanityFilter.ContainsProfanity(Input.Username))
+                {
+                    ModelState.AddModelError(string.Empty, "Inputted username contains a profanity.");
+                    return Page();
+
+                }
                 // Band-aid fix for unknown error detecting unique emails
                 // that have been sent a registration key
                 if (databaseContext.AspNetUsers.Any(e => e.Email == Input.Email))
