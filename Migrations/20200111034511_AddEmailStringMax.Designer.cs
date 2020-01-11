@@ -4,14 +4,16 @@ using Inquizition.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Inquizition.Migrations
 {
     [DbContext(typeof(InquizitionContext))]
-    partial class InquizitionContextModelSnapshot : ModelSnapshot
+    [Migration("20200111034511_AddEmailStringMax")]
+    partial class AddEmailStringMax
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,17 +28,11 @@ namespace Inquizition.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Banned")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IntroCompleted")
                         .HasColumnType("bit");
-
-                    b.Property<int>("ReportedInstances")
-                        .HasColumnType("int");
 
                     b.Property<int>("TotalBookmarks")
                         .HasColumnType("int");
