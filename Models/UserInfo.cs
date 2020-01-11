@@ -12,15 +12,14 @@ namespace Inquizition.Models
         [Required]
         public string Username { get; set; }
         [Required]
-        public bool IntroCompleted { get; set; }
-        [Required]
         public bool EmailConfirmed { get; set; }
         [Required]
+        public bool IntroCompleted { get; set; }
         public int TotalFriends { get; set; }
-        [Required]
         public int TotalSets { get; set; }
-        [Required]
         public int TotalBookmarks { get; set; }
+        public int ReportedInstances { get; set; }
+        public bool Banned { get; set; }
 
         // Add foreign keys for study set tables 
 
