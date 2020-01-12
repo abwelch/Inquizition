@@ -27,7 +27,7 @@ namespace Inquizition.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if(User.Identity.IsAuthenticated)
             {
@@ -36,7 +36,7 @@ namespace Inquizition.Controllers
                 if (AuthenticatedUser == null)
                 {
                     // Band-aid fix to bug if cookies keep user logged in but is not identified
-                    var tempUser = _userManager.GetUserAsync(User).Result;
+                    var tempUser = await _userManager.GetUserAsync(User);
                     if (tempUser == null)
                     {
                         return View();
