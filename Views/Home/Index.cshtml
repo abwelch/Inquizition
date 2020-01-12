@@ -5,61 +5,65 @@
     ViewData["Title"] = "Home Page";
 }
 
-    <section class="text-center lead">
-        @if (User.Identity.IsAuthenticated)
+<section class="text-center lead introduction">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <!-- Should never execute -->
+        @if (Model == null)
         {
-            <!-- Should never execute -->
-            @if (Model == null)
-            {
-                <header class="row">
-                    <div class="col">
-                        <span class="alert alert-danger">@ViewData["homeNullAuthenticatedUser"]</span>
-                    </div>
-                </header>
-            }
-            else
-            {
-                <!-- Logged in content -->
-                <header class="row">
-                    <div class="col">
-                        <h2 class="display-4">Welcome back - <span style="color: lightgreen;">@User.Identity.Name</span>!</h2>
-                        @if (!Model.EmailConfirmed)
-                        {
-                            <span>
-                                Verify your email to share content with friends: @Model.Username @Model.EmailConfirmed
-                                <a asp-area="Identity" asp-page="/Account/Manage/Email">verify</a>
-                            </span>
-                        }
-                        <hr />
-                    </div>
-                </header>
-                <article>
-                    <header class="row">
-                        <div class="col">
-                            <h4>What is Inquizition?</h4>
-                        </div>
-                    </header>
-                    <div class="row">
-                        <div class="col">
-                            <p class="lead">
-                                Inquizition is a web application that provides functionality to create, view, and
-                                share <u>Inquizitors</u>.
-                            </p>
-                        </div>
-                    </div>
-                </article>
-
-            }
+            <header class="row">
+                <div class="col">
+                    <span class="alert alert-danger">@ViewData["homeNullAuthenticatedUser"]</span>
+                </div>
+            </header>
         }
         else
         {
-            <!-- -->
-            <div class="col-12">
+            <!-- Logged in content -->
+            <header class="row">
+                <div class="col">
+                    <h2 class="display-4">Welcome back - <span style="color: lightgreen;">@User.Identity.Name</span>!</h2>
+                    @if (!Model.EmailConfirmed)
+                    {
+                        <span>
+                            Verify your email to share content with friends: @Model.Username @Model.EmailConfirmed
+                            <a asp-area="Identity" asp-page="/Account/Manage/Email">verify</a>
+                        </span>
+                    }
+                    @if (!Model.IntroCompleted)
+                    {
+                        <aside class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></aside>
+
+                    }
+                    <hr />
+                </div>
+            </header>
+            <article>
+                <header class="row">
+                    <div class="col">
+                        <h4>New In Public</h4>
+                    </div>
+                </header>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">
+                            Here's the latest contribution to the public section.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+        }
+    }
+    else
+    {
+        <!-- Content for not logged in -->
+        <header class="row">
+            <div class="col">
                 <h2 class="display-4">Welcome to Inquizition</h2>
+                <aside class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></aside>
                 <hr />
             </div>
-            <div class="col-12">
-                <h4 class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></h4>
-            </div>
-        }
-    </section>
+        </header>
+    }
+</section>
