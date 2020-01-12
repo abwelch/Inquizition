@@ -31,21 +31,23 @@ namespace Inquizition.Controllers
         {
             if(User.Identity.IsAuthenticated)
             {
-                // Retrieve user info from table
                 AuthenticatedUser = _dbContext.UserOverviewInfo.Where(u => u.Username == User.Identity.Name).SingleOrDefault();
+                // User has just registered and is not yet included in UserOverviewInfo table
                 if (AuthenticatedUser == null)
                 {
-                    // Band-aid fix to bug if cookies keep user logged in but is not identified
                     var tempUser = await _userManager.GetUserAsync(User);
+                    // This should never execute
                     if (tempUser == null)
                     {
+                        ViewData["homeNullAuthenticatedUser"] = "Error retrieving account info.\n Suggestion: Clear your cookies.";
                         return View();
                     }
                     AuthenticatedUser = new UserInfo()
                     {
-                        // Add entry to table
+                        // Add user entry
+                        // Values can be assumed b/c submitting registration form immediately redirects to homepage
                         Username = User.Identity.Name,
-                        EmailConfirmed = _userManager.IsEmailConfirmedAsync(tempUser).Result,
+                        EmailConfirmed = false,
                         IntroCompleted = false,
                         TotalFriends = 0,
                         TotalSets = 0,
