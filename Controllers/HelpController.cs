@@ -29,7 +29,7 @@ namespace Inquizition.Controllers
                 // This should never execute
                 if (AuthenticatedUser == null)
                 {
-                    ViewData["helpNullAuthenticatedUser"] = "No entry retrieved for current user!";
+                    ViewData["homeNullAuthenticatedUser"] = "Error retrieving account info.\n Suggestion: Clear your cookies.";
                     return View();
                 }
                 return View(AuthenticatedUser);
