@@ -131,13 +131,18 @@
                             <a asp-controller="Create" asp-action="Index">Create</a> an Inquizitor!
                             <br />
                             Contribute to the public section by setting your new Inquizator to public.
+                            <br />
+                            <strong>Note:</strong> Due to the risk of innappropriate content, 
+                            public Inquizitors cannot contain images, links, or audio files at this time.
                         </p>
                     }
                     else
                     {
                         <p class="lead">
-                            <a asp-area="Identity" asp-page="/Account/Register">Register</a> an account! Creating an account allows you to save created Inquizitors,
-                             add friends, comment on public Inquizitors, and more!
+                            <a asp-area="Identity" asp-page="/Account/Register">Register</a> an account!
+                            <br />
+                            Creating an account allows you to save created Inquizitors,
+                            add friends, comment on public Inquizitors, and more!
                         </p>
                     }
                 </div>
