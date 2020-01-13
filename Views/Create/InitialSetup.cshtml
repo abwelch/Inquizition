@@ -19,8 +19,12 @@
         <header class="row">
             <div class="col text-center">
                 <h1 class="display-4">Initial Setup</h1>
-                <span class="alert alert-warning text-danger">
+                <span class="text-danger">
                     @ViewData["creationWontSave"]
+                    @if (ViewData["creationWontSave"] != null)
+                    {
+                        <br />
+                    }
                     @ViewData["wontShare"]
                 </span>
                 <hr />
@@ -28,31 +32,46 @@
         </header>
         <article>
             <div class="row">
-                <div class="col">
+                <div class="col-7 col-md-5">
                     <form method="post">
                         <div asp-validation-summary="All" class="text-danger"></div>
 
-                        <h6>Choose the assessment type:</h6><br />
-                        <label for="flashcards">Flash Cards</label>
-                        <input type="radio" id="flashcards" name="SelectedAssessment" value="flashcards" />
-                        <label for="quiz">Quiz</label>
-                        <input type="radio" id="quiz" name="SelectedAssessment" value="quiz" />
-                        <label for="twocolumn">Two-Column List</label>
-                        <input type="radio" id="twocolumn" name="SelectedAssessment" value="twocolumn" />
+                        <h4>Choose assessment type:</h4><br />
+                        <label class="radio_container" for="flashcards">
+                            Flash Cards
+                            <input type="radio" checked="checked" id="flashcards" name="SelectedAssessment" value="flashcards" />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="radio_container" for="quiz">
+                            Quiz
+                            <input type="radio" id="quiz" name="SelectedAssessment" value="quiz" />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="radio_container" for="twocolumn">
+                            Two-Column List
+                            <input type="radio" id="twocolumn" name="SelectedAssessment" value="twocolumn" />
+                            <span class="checkmark"></span>
+                        </label>
                         <span asp-validation-for="SelectedAssessment" class="text-danger"></span>
                         <br />
-                        <h6>Inquizitor name:</h6><br />
-                        <input type="text" name="AssessmentName" />
+                        <h4>Input Inquizitor name:</h4><br />
+                        <input type="text" name="AssessmentName" class="mb-4 form-control input-lg" />
                         <span asp-validation-for="AssessmentName" class="text-danger"></span>
                         <br />
-                        <h6>Choose the access level:</h6><br />
-                        <label for="private">Private</label>
-                        <input type="radio" id="private" name="IsPrivate" value="1" />
-                        <label for="public">Public</label>
-                        <input type="radio" id="public" name="IsPrivate" value="0" />
+                        <h4>Choose the access level:</h4><br />
+                        <label class="radio_container" for="private">
+                            Private
+                            <input type="radio" checked="checked" id="private" name="IsPrivate" value="1" />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="radio_container" for="public">
+                            Public
+                            <input type="radio" id="public" name="IsPrivate" value="0" />
+                            <span class="checkmark"></span>
+                        </label>
                         <span asp-validation-for="IsPrivate" class="text-danger"></span>
                         <br />
-                        <button type="submit" class="btn-primary">Proceed</button>
+                        <button type="submit" class="btn btn-primary">Proceed</button>
                     </form>
                 </div>
             </div>
