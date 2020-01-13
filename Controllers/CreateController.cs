@@ -12,10 +12,11 @@ namespace Inquizition.Controllers
     public class CreateController : Controller
     {
         private readonly InquizitionContext _dbContext;
-        private FlashCards FlashCardManager {get; set;}
-        public CreateController(InquizitionContext dbcontext)
+        private readonly IFlashCards _flashCardManager;
+        public CreateController(InquizitionContext dbcontext, IFlashCards flashCardManager)
         {
             _dbContext = dbcontext;
+            _flashCardManager = flashCardManager;
         }
 
         public IActionResult Index()
@@ -31,20 +32,20 @@ namespace Inquizition.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult InitialSetup([Bind("AssessmentName, SelectedAssessment, IsPrivate")] CreateSetup userInputs)
+        public IActionResult InitialSetup([Bind("InquizitorName, SelectedAssessment, IsPrivate")] CreateSetup userInputs)
         {
             Authenticate();
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 ModelState.AddModelError(string.Empty, "Error: Invalid Input");
                 return View();
             }
-            if (ProfanityFilter.ContainsProfanity(userInputs.AssessmentName))
+            if (ProfanityFilter.ContainsProfanity(userInputs.InquizitorName))
             {
                 ModelState.AddModelError(string.Empty, "Error: Inquizitor name contains profanity >:(");
                 return View();
             }
-            if (FlashCardManager.InquizitorNameAvailable(userInputs.AssessmentName))
+            if (!_flashCardManager.InquizitorNameAvailable(userInputs.InquizitorName))
             {
                 ModelState.AddModelError(string.Empty, "Error: Inquizitor name is already in use.");
                 return View();
@@ -52,7 +53,12 @@ namespace Inquizition.Controllers
             switch (userInputs.SelectedAssessment)
             {
                 case "flashcards":
-                    return View("FlashCards", userInputs);
+                    return RedirectToAction("FlashCards", new
+                    {
+                        userInputs.InquizitorName,
+                        userInputs.SelectedAssessment,
+                        userInputs.IsPrivate
+                    });
                 case "quiz":
                     return View("Quiz", userInputs);
                 case "twocolumn":
@@ -63,17 +69,30 @@ namespace Inquizition.Controllers
             }
         }
 
-        public IActionResult FlashCards()
+        public IActionResult FlashCards(string InquizitorName, string SelectedAssessment, bool IsPrivate)
         {
-
+            ViewData["InquizitorName"] = InquizitorName;
+            ViewData["SelectedAssessment"] = SelectedAssessment;
+            ViewData["IsPrivate"] = IsPrivate;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult FlashCards(string inquizName, int? cardNumber,
-            [Bind("AssessmentName, SelectedAssessment, IsPrivate")] FlashCardEntry newCard)
+        public IActionResult FlashCards(int? cardNumber,
+            [Bind("CardBody,CardAnswer")] FlashCardEntry newCard)
         {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Error: Invalid Input");
+                return View();
+            }
+            string violatingAreas = _flashCardManager.CardContainsProfanity(newCard);
+            if (violatingAreas != string.Empty)
+            {
+                ModelState.AddModelError(string.Empty, "Error: Card " + violatingAreas + "contains profanity >:(");
+                return View();
+            }
             return View();
         }
 
