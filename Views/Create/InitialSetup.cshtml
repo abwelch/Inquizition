@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Setup";
 }
+@model Inquizition.Models.CreateSetup
 
 <section class="text-left introduction">
     @if (ViewData["createNullAuthenticatedUser"] != null)
@@ -29,7 +30,29 @@
             <div class="row">
                 <div class="col">
                     <form method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
 
+                        <h6>Choose the assessment type:</h6><br />
+                        <label for="flashcards">Flash Cards</label>
+                        <input type="radio" id="flashcards" name="SelectedAssessment" value="flashcards" />
+                        <label for="quiz">Quiz</label>
+                        <input type="radio" id="quiz" name="SelectedAssessment" value="quiz" />
+                        <label for="twocolumn">Two-Column List</label>
+                        <input type="radio" id="twocolumn" name="SelectedAssessment" value="twocolumn" />
+                        <span asp-validation-for="SelectedAssessment" class="text-danger"></span>
+                        <br />
+                        <h6>Inquizitor name:</h6><br />
+                        <input type="text" name="AssessmentName" />
+                        <span asp-validation-for="AssessmentName" class="text-danger"></span>
+                        <br />
+                        <h6>Choose the access level:</h6><br />
+                        <label for="private">Private</label>
+                        <input type="radio" id="private" name="IsPrivate" value="1" />
+                        <label for="public">Public</label>
+                        <input type="radio" id="public" name="IsPrivate" value="0" />
+                        <span asp-validation-for="IsPrivate" class="text-danger"></span>
+                        <br />
+                        <button type="submit" class="btn-primary">Proceed</button>
                     </form>
                 </div>
             </div>
@@ -38,4 +61,6 @@
 </section>
 
 
-
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

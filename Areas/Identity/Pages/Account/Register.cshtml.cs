@@ -93,7 +93,6 @@ namespace Inquizition.Areas.Identity.Pages.Account
                 {
                     ModelState.AddModelError(string.Empty, "Inputted username contains a profanity.");
                     return Page();
-
                 }
                 // Band-aid fix for unknown error detecting unique emails
                 // that have been sent a registration key

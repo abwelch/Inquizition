@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Inquizition.Models
 {
     public class CreateSetup
     {
-        public string InquizitionName { get; set; }
+        [Required]
+        public string AssessmentName { get; set; }
 
+        [Required]
+        [StringLength(55, MinimumLength = 3)]
         public string SelectedAssessment { get; set; }
 
-        public bool IsPrivate { get; set; }
+        [Required]
+        public byte IsPrivate { get; set; }
     }
 }

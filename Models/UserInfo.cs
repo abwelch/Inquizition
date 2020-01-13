@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Inquizition.Models
 {
@@ -22,6 +18,22 @@ namespace Inquizition.Models
         public bool Banned { get; set; }
 
         // Add foreign keys for study set tables 
+
+    }
+
+    // Utilized to store records of users reporting other users
+    public class UserReports
+    {
+        public int ID { get; set; }
+
+        public string Offender { get; set; }
+
+        public string Accuser { get; set; }
+
+        public string ReportedInquizitor { get; set; }
+
+        // Store the comment ID
+        public int ReportedComment { get; set; }
 
     }
 }

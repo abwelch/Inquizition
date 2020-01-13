@@ -9,15 +9,11 @@ namespace Inquizition.Models
 {
     public class FlashCards
     {
-        private List<FlashCardEntry> Assessment;
-        private int CardCounter { get; set; }
         private readonly InquizitionContext _dbContext;
 
         public FlashCards(InquizitionContext dbContext)
         {
             _dbContext = dbContext;
-            Assessment = new List<FlashCardEntry>();
-            CardCounter = 0;
         }
 
         public bool AddFlashCard()
@@ -31,6 +27,15 @@ namespace Inquizition.Models
 
             return 0;
         }
+
+        public List<FlashCardEntry> RetrieveAllEntries(string inquizName)
+        {
+            List<FlashCardEntry> Inquizitor = new List<FlashCardEntry>();
+            // Retrieve all entries from db matching inquizName and store in list
+
+
+            return Inquizitor;
+        }
     }
 
     public class FlashCardEntry
@@ -40,7 +45,7 @@ namespace Inquizition.Models
         public string Creator { get; set; }
 
         [Required]
-        [StringLength(45, MinimumLength = 3)]
+        [StringLength(55, MinimumLength = 3)]
         public string InquizitorName { get; set; }
 
         public int CardNumber { get; set; }

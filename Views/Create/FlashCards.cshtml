@@ -1,8 +1,17 @@
 ﻿@{
     ViewData["Title"] = "FlashCards";
 }
+@model Inquizition.Models.CreateSetup
+
+<h4>@Model.AssessmentName</h4>
+<br />
+<h4>@Model.SelectedAssessment</h4>
+<br />
+<h4>@Model.IsPrivate.ToString()</h4>
 
 <form method="post">
+    <input type="text" />
+
     <button type="submit" asp-controller="Create" asp-action="FlashCards" asp-route-inquizName="Hello" asp-route-cardNumber="1">Click here</button>
 </form>
 

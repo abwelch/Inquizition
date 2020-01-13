@@ -12,9 +12,6 @@ namespace Inquizition.Controllers
     public class CreateController : Controller
     {
         private readonly InquizitionContext _dbContext;
-
-        [BindProperty]
-        public FlashCardEntry NewCard { get; set; }
         public CreateController(InquizitionContext dbcontext)
         {
             _dbContext = dbcontext;
@@ -34,7 +31,7 @@ namespace Inquizition.Controllers
             }
             else
             {
-                UserInfo AuthenicatedUser = _dbContext.UserOverviewInfo.Where(u => u.Username == User.Identity.Name).SingleOrDefault();
+                UserInfo AuthenicatedUser = _dbContext.UserOverviewInfo.FirstOrDefault(u => u.Username == User.Identity.Name);
                 // This should never execute
                 if (AuthenicatedUser == null)
                 {
@@ -51,13 +48,30 @@ namespace Inquizition.Controllers
         }
 
         [HttpPost]
-        public IActionResult InitialSetup(int? id)
+        [ValidateAntiForgeryToken]
+        public IActionResult InitialSetup([Bind("AssessmentName, SelectedAssessment, IsPrivate")] CreateSetup userInputs)
         {
-            // Determine view with enum
-            return View();
+            if(!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Error: Invalid Input");
+
+                return View();
+            }
+            switch(userInputs.SelectedAssessment)
+            {
+                case "flashcards":
+                    return View("FlashCards", userInputs);
+                case "quiz":
+                    return View("Quiz", userInputs);
+                case "twocolumn":
+                    return View("TwoColumnList", userInputs);
+                default:
+                    // Add an error message
+                    return View();
+            }
         }
 
-        public IActionResult FlashCards(string inquizName)
+        public IActionResult FlashCards()
         {
 
             return View();
