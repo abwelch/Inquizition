@@ -7,7 +7,18 @@ using Inquizition.Data;
 
 namespace Inquizition.Models
 {
-    public class FlashCards
+    public interface IFlashCards
+    {
+        public bool InquizitorNameAvailable(string input);
+
+        public string CardContainsProfanity(FlashCardEntry card);
+
+        public bool AddFlashCard();
+
+        public List<FlashCardEntry> RetrieveAllEntries(string inquizitor);
+    }
+
+    public class FlashCards : IFlashCards
     {
         private readonly InquizitionContext _dbContext;
 
@@ -25,11 +36,24 @@ namespace Inquizition.Models
         public bool InquizitorNameAvailable(string inputtedName) =>
             _dbContext.FlashCards.FirstOrDefault(f => f.InquizitorName == inputtedName) == null ? true : false;
 
-        public int CommitToDatabase()
+        public string CardContainsProfanity(FlashCardEntry newCard)
         {
-
-            return 0;
+            string violatingSections = string.Empty;
+            if (ProfanityFilter.ContainsProfanity(newCard.CardTitle))
+            {
+                violatingSections += "Title ";
+            }
+            if (ProfanityFilter.ContainsProfanity(newCard.CardBody))
+            {
+                violatingSections += "Body ";
+            }
+            if (ProfanityFilter.ContainsProfanity(newCard.CardAnswer))
+            {
+                violatingSections += "Answer ";
+            }
+            return violatingSections;
         }
+
 
         public List<FlashCardEntry> RetrieveAllEntries(string inquizName)
         {
@@ -47,12 +71,14 @@ namespace Inquizition.Models
 
         public string Creator { get; set; }
 
-        [Required]
         [StringLength(55, MinimumLength = 3)]
         public string InquizitorName { get; set; }
 
+        public bool IsPrivate { get; set; }
+
         public int CardNumber { get; set; }
 
+        [Required]
         [StringLength(45)]
         public string CardTitle { get; set; }
 
