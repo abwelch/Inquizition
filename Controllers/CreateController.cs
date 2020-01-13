@@ -12,16 +12,20 @@ namespace Inquizition.Controllers
     public class CreateController : Controller
     {
         private readonly InquizitionContext _dbContext;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public CreateController(InquizitionContext dbcontext,
-            UserManager<IdentityUser> userManager)
+        [BindProperty]
+        public FlashCardEntry NewCard { get; set; }
+        public CreateController(InquizitionContext dbcontext)
         {
             _dbContext = dbcontext;
-            _userManager = userManager;
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult InitialSetup()
         {
             // Add viewdata warning if not logged in
             if (!User.Identity.IsAuthenticated)
@@ -43,6 +47,38 @@ namespace Inquizition.Controllers
                         "You will be unable to share your Inquizitor with the public or with friends.";
                 }
             }
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult InitialSetup(int? id)
+        {
+            // Determine view with enum
+            return View();
+        }
+
+        public IActionResult FlashCards(string inquizName)
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult FlashCards(string inquizName, int? cardNumber)
+        {
+            return View();
+        }
+
+        public IActionResult MidSummary(string type, string inquizName)
+        {
+
+            return View();
+        }
+
+        public IActionResult FinalSummary(string type, string inquizName)
+        {
+
             return View();
         }
     }
