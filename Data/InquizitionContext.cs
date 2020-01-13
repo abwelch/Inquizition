@@ -25,5 +25,6 @@ namespace Inquizition.Data
         }
         public DbSet<IdentityUser> AspNetUsers { get; set; }
         public DbSet<UserInfo> UserOverviewInfo { get; set; }
+        public DbSet<FlashCardEntry> FlashCards { get; set; }
     }
 }
