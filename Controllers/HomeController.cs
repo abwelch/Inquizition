@@ -31,7 +31,7 @@ namespace Inquizition.Controllers
         {
             if(User.Identity.IsAuthenticated)
             {
-                AuthenticatedUser = _dbContext.UserOverviewInfo.Where(u => u.Username == User.Identity.Name).SingleOrDefault();
+                AuthenticatedUser = _dbContext.UserOverviewInfo.FirstOrDefault(u => u.Username == User.Identity.Name);
                 // User has just registered and is not yet included in UserOverviewInfo table
                 if (AuthenticatedUser == null)
                 {
