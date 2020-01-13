@@ -22,6 +22,9 @@ namespace Inquizition.Models
             return true;
         }
 
+        public bool InquizitorNameAvailable(string inputtedName) =>
+            _dbContext.FlashCards.FirstOrDefault(f => f.InquizitorName == inputtedName) == null ? true : false;
+
         public int CommitToDatabase()
         {
 
