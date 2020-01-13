@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<section class="text-left introduction">
+    <header class="row">
+        <div class="col text-center">
+            <h1 class="display-3">Inquizitor Overviews</h1>
+            <hr />
+        </div>
+    </header>
+    <article>
+        <div class="row">
+            <div class="col">
+                <header>
+                    <h4>Flash Cards</h4>
+                </header>
+                <p class="lead">
+                    The Flash Cards assessment allows the user to construct each question in a flash card structure.
+                    Each card can contain text, audio clips, images, or a mixture of the three.
+                    <br />
+                    Maximum Capacity: 50 cards
+                </p>
+            </div>
+        </div>
+    </article>
+    <article>
+        <div class="row">
+            <div class="col">
+                <header>
+                    <h4>Quiz</h4>
+                </header>
+                <p class="lead">
+                    The Quiz assessment implements a traditional quiz layout. Questions can be multiple choice,
+                    true/false, fill in the blank, or matching. Quizzes can contain text, audio links,
+                    images, or a mixture of the three.
+                    <br />
+                    The user is responsible for assigning a correct answer to each question.
+                    <br />
+                    Maximum Capacity: 75 questions
+                </p>
+            </div>
+        </div>
+    </article>
+    <article>
+        <div class="row">
+            <div class="col">
+                <header>
+                    <h4>Two-Column List</h4>
+                </header>
+                <p class="lead">
+                    The Two-Column List assessment implements a question-answer or term-definition structure
+                    where each row contains a single pair. Two-Column Lists can contain text, audio links,
+                    images, or a mixture of the three.
+                    <br />
+                    Maximum Capacity: 100 pairs
+                </p>
+            </div>
+        </div>
+    </article>
+    <a asp-controller="Create" asp-action="InitialSetup" class="btn btn-primary mb-4">Create an Inquizitor</a>
+    <aside class="text-warning">
+        <strong>Note: </strong>Public Inquizitors cannot contain images or audio clips.
+        Public Inquizitors can be set to private at any time. However, private Inquizitors cannot be set to public
+        if they contain the aforementioned elements. Private Inquizitors can be edited any time to comply with the public constraints.
+    </aside>
+</section>
+

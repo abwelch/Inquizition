@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Setup";
+}
+
+<section class="text-left introduction">
+    @if (ViewData["createNullAuthenticatedUser"] != null)
+    {
+        <header class="row">
+            <div class="col">
+                <span class="alert alert-danger">
+                    @ViewData["createNullAuthenticatedUser"]
+                </span>
+            </div>
+        </header>
+    }
+    else
+    {
+        <header class="row">
+            <div class="col text-center">
+                <h1 class="display-4">Initial Setup</h1>
+                <span class="alert alert-warning text-danger">
+                    @ViewData["creationWontSave"]
+                    @ViewData["wontShare"]
+                </span>
+                <hr />
+            </div>
+        </header>
+        <article>
+            <div class="row">
+                <div class="col">
+                    <form method="post">
+
+                    </form>
+                </div>
+            </div>
+        </article>
+    }
+</section>
+
+
+
