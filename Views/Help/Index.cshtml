@@ -30,7 +30,7 @@
             </header>
             <div class="row">
                 <div class="col">
-                    <p class="lead">
+                    <p>
                         Inquizition is a web application that provides functionality to create, view, and
                         share <u>Inquizitors</u>.
                     </p>
@@ -45,7 +45,7 @@
             </header>
             <div class="row">
                 <div class="col">
-                    <p class="lead">
+                    <p>
                         <u>An Inquizitor is a user-created assessment</u>.
                     </p>
                 </div>
@@ -59,7 +59,7 @@
             </header>
             <div class="row">
                 <div class="col">
-                    <p class="lead">
+                    <p>
                         At the foundation of Inquizition is the ability to create Inquizitors.
                         The Create feature provides users with three available assessment templates:
                         <u>Flash Cards, Quizzes, and Two-Column Lists</u>. Each template provides unique features
@@ -76,7 +76,7 @@
             </header>
             <div class="row">
                 <div class="col">
-                    <p class="lead">
+                    <p>
                         Inquizitors can be grouped into two categories based on access level: public and private.
                         The access level is specified by the creator.<br />
                         <u>Public</u>: the Inquizitor can be viewed by any user of the application. <br />
@@ -93,7 +93,7 @@
             </header>
             <div class="row">
                 <div class="col">
-                    <p class="lead">
+                    <p>
                         As we just learned, specifiying an Inquizitor as private restricts access to only the creator.
                         However, private Inquizitors can still be shared amongst the creator's friends. The user
                         can elect to grant access to specific users within a friends list.
@@ -109,7 +109,7 @@
             </header>
             <div class="row">
                 <div class="col">
-                    <p class="lead">
+                    <p>
                         Social functionality occurs via two platforms: <u>friends list messaging</u> and <u>public Inquizitor comment sections</u>.
                         begins by adding/accepting users to a friends list. Once added/accepted,
                         users can send direct messages and share Inquizitors.
@@ -127,7 +127,7 @@
                 <div class="col">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <p class="lead">
+                        <p>
                             <a asp-controller="Create" asp-action="Index">Create</a> an Inquizitor!
                             <br />
                             Contribute to the public section by setting your new Inquizator to public.
@@ -138,7 +138,7 @@
                     }
                     else
                     {
-                        <p class="lead">
+                        <p>
                             <a asp-area="Identity" asp-page="/Account/Register">Register</a> an account!
                             <br />
                             Creating an account allows you to save created Inquizitors,
