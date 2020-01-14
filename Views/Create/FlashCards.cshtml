@@ -1,19 +1,112 @@
 ﻿@{
     ViewData["Title"] = "FlashCards";
 }
-@model Inquizition.Models.CreateSetup
+@model Inquizition.Models.IFlashCards
 
-<h4>@Model.AssessmentName</h4>
-<br />
-<h4>@Model.SelectedAssessment</h4>
-<br />
-<h4>@Model.IsPrivate.ToString()</h4>
+<section>
+    <header class="jumbotron p-0 text-center">
+        <h1 class="p-0 mb-1" style="color: #00a9ff">@ViewData["InquizitorName"]</h1>
+        <span class="lead">Flash Cards</span>
+        <br />
+        @if ((bool)ViewData["IsPrivate"])
+        {
+            <span class="lead">Private</span>
+        }
+        else
+        {
+            <span class="lead">Public</span>
+        }
+    </header>
+    <!-- Display prior cards -->
+    <!-- Set Card Theme -->
+    @if (!Model.ColorSet)
+    {
 
-<form method="post">
-    <input type="text" />
+        <h4>Choose a card color:</h4><br />
+        <div class="row">
+            <div class="col-2">
+                <form method="post" id="cardForm">
+                    <label class="radio_container" for="blue">
+                        Blue
+                        <input type="radio" checked="checked" id="blue" name="CardColor" value="bg-primary" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio_container" for="red">
+                        Red
+                        <input type="radio" id="red" name="CardColor" value="bg-danger" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio_container" for="yellow">
+                        Yellow
+                        <input type="radio" id="yellow" name="CardColor" value="bg-warning" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio_container" for="grey">
+                        Grey
+                        <input type="radio" id="grey" name="CardColor" value="bg-secondary" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio_container" for="green">
+                        Green
+                        <input type="radio" id="green" name="CardColor" value="bg-success" />
+                        <span class="checkmark"></span>
+                    </label>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 col-sm-3">
+                <button class="btn btn-primary mb-5" onclick="SetColor()">Confirm Color</button>
+            </div>
+        </div>
+    }
+    <!-- Card Input -->
+    <div class="row justify-content-center">
+        <div class="col-10 col-sm-8 col-md-6 flip_container">
+            <div id="whole-card" class="flip m-0 p-0">
+                <div class="flip_front w-100">
+                    <div class="card">
+                        <div id="body" class="card-body">
+                            <textarea rows="8" class="form-control text-center" name="CardBody" form="cardForm" placeholder="Enter Body" style="display: block; height: 100%;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip_back w-100">
+                    <div class="card">
+                        <div id="answer" class="card-body">
+                            <textarea rows="8" class="form-control text-center" name="CardAnswer" form="cardForm" placeholder="Enter Answer" style="display: block; height: 100%;"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row justify-content-center">
+        <div col="col-1">
+            <button class="btn btn-primary" style="font-size:x-large;" onclick="Flip()">Flip</button>
+        </div>
+    </div>
 
-    <button type="submit" asp-controller="Create" asp-action="FlashCards" asp-route-inquizName="Hello" asp-route-cardNumber="1">Click here</button>
-</form>
+</section>
+<!--
+<textarea name="CardBody" form="cardForm" placeholder="Enter Answer" class="text-center" style="display: block; width: 300px; height: 200px;"></textarea>
+<button class="btn btn-primary" onclick="Flip()">Flip</button>
+<textarea name="CardBody" form="cardForm" placeholder="Enter Body" class="text-center" style="display: block; width: 300px; height: 200px;"></textarea>
+    -->
+<script>
+    function SetColor() {
+        var color = document.querySelector('input[name="CardColor"]:checked').value;
+        document.getElementById("body").className = "card-body " + color;
+        document.getElementById("answer").className = "card-body " + color;
+    }
+
+    function Flip() {
+        document.getElementById("whole-card").classList.toggle("flip-counter");
+    }
+</script>
 
 
-
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
