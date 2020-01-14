@@ -40,6 +40,8 @@ namespace Inquizition
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            services.AddScoped<IFlashCards, FlashCards>();
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
