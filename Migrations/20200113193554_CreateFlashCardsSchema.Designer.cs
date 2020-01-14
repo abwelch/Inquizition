@@ -4,14 +4,16 @@ using Inquizition.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Inquizition.Migrations
 {
     [DbContext(typeof(InquizitionContext))]
-    partial class InquizitionContextModelSnapshot : ModelSnapshot
+    [Migration("20200113193554_CreateFlashCardsSchema")]
+    partial class CreateFlashCardsSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,14 +37,16 @@ namespace Inquizition.Migrations
                         .HasMaxLength(400);
 
                     b.Property<string>("CardBody")
-                        .HasColumnType("nvarchar(400)")
-                        .HasMaxLength(400);
-
-                    b.Property<string>("CardColor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(300)")
+                        .HasMaxLength(300);
 
                     b.Property<int>("CardNumber")
                         .HasColumnType("int");
+
+                    b.Property<string>("CardTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(45)")
+                        .HasMaxLength(45);
 
                     b.Property<string>("Creator")
                         .HasColumnType("nvarchar(max)");
