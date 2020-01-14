@@ -74,7 +74,7 @@ namespace Inquizition.Controllers
             ViewData["InquizitorName"] = InquizitorName;
             ViewData["SelectedAssessment"] = SelectedAssessment;
             ViewData["IsPrivate"] = IsPrivate;
-            return View();
+            return View(_flashCardManager);
         }
 
         [HttpPost]
