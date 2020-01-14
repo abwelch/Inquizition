@@ -55,18 +55,18 @@
                         <span asp-validation-for="SelectedAssessment" class="text-danger"></span>
                         <br />
                         <h4>Input Inquizitor name:</h4><br />
-                        <input type="text" name="AssessmentName" class="mb-4 form-control input-lg" />
-                        <span asp-validation-for="AssessmentName" class="text-danger"></span>
+                        <input type="text" name="InquizitorName" class="mb-4 form-control input-lg" />
+                        <span asp-validation-for="InquizitorName" class="text-danger"></span>
                         <br />
                         <h4>Choose the access level:</h4><br />
                         <label class="radio_container" for="private">
                             Private
-                            <input type="radio" checked="checked" id="private" name="IsPrivate" value="1" />
+                            <input type="radio" checked="checked" id="private" name="IsPrivate" value="true" />
                             <span class="checkmark"></span>
                         </label>
                         <label class="radio_container" for="public">
                             Public
-                            <input type="radio" id="public" name="IsPrivate" value="0" />
+                            <input type="radio" id="public" name="IsPrivate" value="false" />
                             <span class="checkmark"></span>
                         </label>
                         <span asp-validation-for="IsPrivate" class="text-danger"></span>
