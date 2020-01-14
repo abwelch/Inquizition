@@ -9,27 +9,39 @@ namespace Inquizition.Models
 {
     public interface IFlashCards
     {
+        public List<FlashCardEntry> Inquizitor { get; set; }
+
+        public FlashCardEntry ExampleCard { get; set; }
+
+        public bool ColorSet { get; set; }
+
         public bool InquizitorNameAvailable(string input);
 
         public string CardContainsProfanity(FlashCardEntry card);
 
-        public bool AddFlashCard();
+        public bool AddFlashCard(FlashCardEntry card);
 
-        public List<FlashCardEntry> RetrieveAllEntries(string inquizitor);
     }
 
     public class FlashCards : IFlashCards
     {
         private readonly InquizitionContext _dbContext;
 
+        public List<FlashCardEntry> Inquizitor { get; set; }
+
+        public FlashCardEntry ExampleCard { get; set; }
+
+        public bool ColorSet { get; set; }
+
         public FlashCards(InquizitionContext dbContext)
         {
             _dbContext = dbContext;
+            Inquizitor = new List<FlashCardEntry>();
         }
 
-        public bool AddFlashCard()
+        public bool AddFlashCard(FlashCardEntry newCard)
         {
-       
+        
             return true;
         }
 
@@ -39,10 +51,6 @@ namespace Inquizition.Models
         public string CardContainsProfanity(FlashCardEntry newCard)
         {
             string violatingSections = string.Empty;
-            if (ProfanityFilter.ContainsProfanity(newCard.CardTitle))
-            {
-                violatingSections += "Title ";
-            }
             if (ProfanityFilter.ContainsProfanity(newCard.CardBody))
             {
                 violatingSections += "Body ";
@@ -52,16 +60,6 @@ namespace Inquizition.Models
                 violatingSections += "Answer ";
             }
             return violatingSections;
-        }
-
-
-        public List<FlashCardEntry> RetrieveAllEntries(string inquizName)
-        {
-            List<FlashCardEntry> Inquizitor = new List<FlashCardEntry>();
-            // Retrieve all entries from db matching inquizName and store in list
-
-
-            return Inquizitor;
         }
     }
 
@@ -78,16 +76,14 @@ namespace Inquizition.Models
 
         public int CardNumber { get; set; }
 
-        [Required]
-        [StringLength(45)]
-        public string CardTitle { get; set; }
-
-        [StringLength(300)]
+        [StringLength(400)]
         public string CardBody { get; set; }
 
         [Required]
         [StringLength(400)]
         public string CardAnswer { get; set; }
+
+        public string CardColor { get; set; }
 
         public string Image { get; set; }
 
