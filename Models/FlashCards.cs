@@ -88,7 +88,6 @@ namespace Inquizition.Models
                 }
             }
         }
-
     }
 
     // Table schema class
@@ -119,7 +118,14 @@ namespace Inquizition.Models
     {
         public string CardColor { get; set; }
 
+        public bool FirstCard { get; set; }
+
         public List<FlashCardEntry> Inquizitor { get; set; }
+
+        public InputFlashCard()
+        {
+            Inquizitor = new List<FlashCardEntry>();
+        }
 
         public InputFlashCard ShallowCopy()
         {
