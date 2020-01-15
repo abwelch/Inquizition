@@ -19,7 +19,8 @@
         <header class="row">
             <div class="col text-center">
                 <h1 class="display-4">Initial Setup</h1>
-                <span class="text-danger">
+                <hr />
+                <span class="alert alert-danger">
                     @ViewData["creationWontSave"]
                     @if (ViewData["creationWontSave"] != null)
                     {
@@ -27,14 +28,13 @@
                     }
                     @ViewData["wontShare"]
                 </span>
-                <hr />
+                <br />
             </div>
         </header>
         <article>
             <div class="row">
                 <div class="col-7 col-md-5">
                     <form asp-controller="Create" asp-action="InitialSetup">
-                        <div asp-validation-summary="All" class="text-danger"></div>
                         <h4>Choose assessment type:</h4><br />
                         <label class="radio_container" for="flashcards">
                             Flash Cards
@@ -54,6 +54,7 @@
                         <br />
                         <h4>Input Inquizitor name:</h4><br />
                         <input type="text" asp-for="InquizitorName" class="mb-4 form-control input-lg" />
+                        <span asp-validation-for="InquizitorName" class="text-danger"></span>
                         <br />
                         <h4>Choose the access level:</h4><br />
                         <label class="radio_container" for="private">
