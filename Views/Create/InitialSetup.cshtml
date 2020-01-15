@@ -33,43 +33,39 @@
         <article>
             <div class="row">
                 <div class="col-7 col-md-5">
-                    <form method="post">
+                    <form asp-controller="Create" asp-action="InitialSetup">
                         <div asp-validation-summary="All" class="text-danger"></div>
-
                         <h4>Choose assessment type:</h4><br />
                         <label class="radio_container" for="flashcards">
                             Flash Cards
-                            <input type="radio" checked="checked" id="flashcards" name="SelectedAssessment" value="flashcards" />
+                            <input type="radio" checked="checked" id="flashcards" asp-for="SelectedAssessment" value="flashcards" />
                             <span class="checkmark"></span>
                         </label>
                         <label class="radio_container" for="quiz">
                             Quiz
-                            <input type="radio" id="quiz" name="SelectedAssessment" value="quiz" />
+                            <input type="radio" id="quiz" asp-for="SelectedAssessment" value="quiz" />
                             <span class="checkmark"></span>
                         </label>
                         <label class="radio_container" for="twocolumn">
                             Two-Column List
-                            <input type="radio" id="twocolumn" name="SelectedAssessment" value="twocolumn" />
+                            <input type="radio" id="twocolumn" asp-for="SelectedAssessment" value="twocolumn" />
                             <span class="checkmark"></span>
                         </label>
-                        <span asp-validation-for="SelectedAssessment" class="text-danger"></span>
                         <br />
                         <h4>Input Inquizitor name:</h4><br />
-                        <input type="text" name="InquizitorName" class="mb-4 form-control input-lg" />
-                        <span asp-validation-for="InquizitorName" class="text-danger"></span>
+                        <input type="text" asp-for="InquizitorName" class="mb-4 form-control input-lg" />
                         <br />
                         <h4>Choose the access level:</h4><br />
                         <label class="radio_container" for="private">
                             Private
-                            <input type="radio" checked="checked" id="private" name="IsPrivate" value="true" />
+                            <input type="radio" checked="checked" id="private" asp-for="IsPrivate" value="true" />
                             <span class="checkmark"></span>
                         </label>
                         <label class="radio_container" for="public">
                             Public
-                            <input type="radio" id="public" name="IsPrivate" value="false" />
+                            <input type="radio" id="public" asp-for="IsPrivate" value="false" />
                             <span class="checkmark"></span>
                         </label>
-                        <span asp-validation-for="IsPrivate" class="text-danger"></span>
                         <br />
                         <button type="submit" class="btn btn-primary">Proceed</button>
                     </form>

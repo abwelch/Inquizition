@@ -19,7 +19,7 @@
     </header>
     <!-- Display prior cards -->
     <!-- Set Card Theme -->
-    @if (Model.CardColor == string.Empty)
+    @if (Model.FirstCard)
     {
         <h4>Choose a card color:</h4><br />
         <div class="row">
@@ -56,6 +56,7 @@
                 <button class="btn btn-primary mb-3" onclick="SetColor()">Confirm Color</button>
             </div>
         </div>
+        <input type="hidden" asp-for="FirstCard" value="@Model.FirstCard" form="cardForm" />
     }
     else
     {
@@ -68,14 +69,14 @@
                         <div class="flip_front w-100">
                             <div class="card">
                                 <div class="card-body @Model.CardColor">
-                                    @Model.Inquizitor[i].CardBody
+                                    <span>@Model.Inquizitor[i].CardBody</span>
                                 </div>
                             </div>
                         </div>
                         <div class="flip_back w-100">
                             <div class="card">
                                 <div class="card-body @Model.CardColor">
-                                    @Model.Inquizitor[i].CardAnswer
+                                    <span>@Model.Inquizitor[i].CardAnswer</span>
                                 </div>
                             </div>
                         </div>
@@ -89,30 +90,40 @@
         }
         // Retain card color throughout posts
         <input type="hidden" asp-for="CardColor" value="@Model.CardColor" form="cardForm" />
+        <input type="hidden" asp-for="FirstCard" value="false" form="cardForm" />
     }
     <!-- Card Input -->
-    <div class="row justify-content-center">
+    <script>ClearInputCard();</script>
+    <div class="row justify-content-center" onload="ClearInputCard()">
         <div class="col-10 col-sm-8 col-md-6 flip_container">
             <div id="whole-card" class="flip m-0 p-0">
-                <form method="post" id="cardForm">
+                <form asp-controller="Create" asp-action="FlashCards" id="cardForm">
+                    <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="flip_front w-100">
                         <div class="card">
                             <div id="body" class="card-body">
-                                <textarea rows="8" class="form-control text-center" asp-for="CardBody" placeholder="Enter Body" style="display: block; height: 100%;"></textarea>
+                                <textarea rows="8" id="front-input" class="form-control text-center" asp-for="CardBody" placeholder="Enter Body" style="display: block; height: 100%;"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="flip_back w-100">
                         <div class="card">
                             <div id="answer" class="card-body">
-                                <textarea rows="8" class="form-control text-center" asp-for="CardAnswer" placeholder="Enter Answer" style="display: block; height: 100%;"></textarea>
+                                <textarea rows="8" id="back-input" class="form-control text-center" asp-for="CardAnswer" placeholder="Enter Answer" style="display: block; height: 100%;"></textarea>
                             </div>
                         </div>
                     </div>
                     <!-- Add values that do not require user input -->
                     <input type="hidden" asp-for="InquizitorName" value="@Model.InquizitorName" />
                     <input type="hidden" asp-for="IsPrivate" value="@Model.IsPrivate" />
-                    <input type="hidden" asp-for="Creator" value="@User.Identity.Name" />
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <input type="hidden" asp-for="Creator" value="@User.Identity.Name" />
+                    }
+                    else
+                    {
+                        <input type="hidden" asp-for="Creator" value="@Model.Creator" />
+                    }
                 </form>
             </div>
         </div>
@@ -128,23 +139,7 @@
     <br />
 </section>
 
-<script>
-    function SetColor() {
-        var color = document.querySelector('input[name="CardColor"]:checked').value;
-        document.getElementById("body").className = "card-body " + color;
-        document.getElementById("answer").className = "card-body " + color;
-    }
-
-    function FlipCurrent() {
-        document.getElementById("whole-card").classList.toggle("flip-counter");
-    }
-
-    function FlipCreated(cardID) {
-        document.getElementById(cardID).classList.toggle("flip-counter");
-    }
-</script>
-
-
 @section Scripts {
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <partial name="_ValidationScriptsPartial" />
 }

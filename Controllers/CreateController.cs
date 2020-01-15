@@ -32,7 +32,7 @@ namespace Inquizition.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult InitialSetup([Bind("InquizitorName, SelectedAssessment, IsPrivate")] CreateSetup userInputs)
+        public IActionResult InitialSetup(CreateSetup userInputs)
         {
             Authenticate();
             if (!ModelState.IsValid)
@@ -68,23 +68,21 @@ namespace Inquizition.Controllers
             }
         }
 
+        [HttpGet]
         public IActionResult FlashCards(string InquizitorName, bool IsPrivate)
         {
             InputFlashCard InputCard = new InputFlashCard
             {
                 InquizitorName = InquizitorName,
                 IsPrivate = IsPrivate,
-                CardColor = _flashCardManager.RetrieveCardColor(InquizitorName)
+                FirstCard = true
             };
             return View(InputCard);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        /*
-         Need to figure out how to pass the viewdata values from the method above into this method
-        */
-        public IActionResult FlashCards([Bind("CardColor, InquizitorName, IsPrivate, CardBody, CardAnswer")] InputFlashCard newCard)
+        public IActionResult FlashCards(InputFlashCard newCard)
         {
             if (!ModelState.IsValid)
             {
@@ -97,19 +95,23 @@ namespace Inquizition.Controllers
                 ModelState.AddModelError(string.Empty, "Error: Card " + violatingAreas + "contains profanity >:(");
                 return View();
             }
-            // Determine color on first card and update database
-            newCard.CardColor = _flashCardManager.RetrieveCardColor(newCard.InquizitorName);
-            if (newCard.CardColor == null)
+            // Assign random value to users not logged in
+            // Will only execute once and then pass random value each subsequent time from view
+            if (newCard.Creator == null)
             {
-                // User did not set a value. Set default
+                Random rnd = new Random();
+                newCard.Creator = rnd.Next(1, 10000000).ToString();
+            }
+            if (newCard.FirstCard == true)
+            {
                 if (newCard.CardColor == null)
                 {
+                    // Set default color
                     newCard.CardColor = "bg-primary";
                 }
+                newCard.FirstCard = false;
                 AddColorTheme(newCard.CardColor, newCard.InquizitorName);
             }
-            newCard.Creator = User.Identity.Name;
-            // Method will call SaveChanges() and update the ColorTheme add above as well
             // Implicit upcast polymorphism in method parameter
             // This condition should never execute bc other logic is implemented to restrict creates at max cap
             if (!_flashCardManager.AddFlashCard(newCard))
@@ -119,7 +121,6 @@ namespace Inquizition.Controllers
             }
             // Generate list of card entries for this inquizitor
             _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
-            // Copy values to input card before newCard is out of scope
             return View(newCard);
         }
 
