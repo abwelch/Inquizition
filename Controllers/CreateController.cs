@@ -12,8 +12,8 @@ namespace Inquizition.Controllers
     public class CreateController : Controller
     {
         private readonly InquizitionContext _dbContext;
-        private readonly IFlashCards _flashCardManager;
-        public CreateController(InquizitionContext dbcontext, IFlashCards flashCardManager)
+        private readonly IFlashCardManager _flashCardManager;
+        public CreateController(InquizitionContext dbcontext, IFlashCardManager flashCardManager)
         {
             _dbContext = dbcontext;
             _flashCardManager = flashCardManager;
@@ -56,7 +56,6 @@ namespace Inquizition.Controllers
                     return RedirectToAction("FlashCards", new
                     {
                         userInputs.InquizitorName,
-                        userInputs.SelectedAssessment,
                         userInputs.IsPrivate
                     });
                 case "quiz":
@@ -69,18 +68,23 @@ namespace Inquizition.Controllers
             }
         }
 
-        public IActionResult FlashCards(string InquizitorName, string SelectedAssessment, bool IsPrivate)
+        public IActionResult FlashCards(string InquizitorName, bool IsPrivate)
         {
-            ViewData["InquizitorName"] = InquizitorName;
-            ViewData["SelectedAssessment"] = SelectedAssessment;
-            ViewData["IsPrivate"] = IsPrivate;
-            return View(_flashCardManager);
+            InputFlashCard InputCard = new InputFlashCard
+            {
+                InquizitorName = InquizitorName,
+                IsPrivate = IsPrivate,
+                CardColor = _flashCardManager.RetrieveCardColor(InquizitorName)
+            };
+            return View(InputCard);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult FlashCards(int? cardNumber,
-            [Bind("CardBody,CardAnswer")] FlashCardEntry newCard)
+        /*
+         Need to figure out how to pass the viewdata values from the method above into this method
+        */
+        public IActionResult FlashCards([Bind("CardColor, InquizitorName, IsPrivate, CardBody, CardAnswer")] InputFlashCard newCard)
         {
             if (!ModelState.IsValid)
             {
@@ -93,7 +97,41 @@ namespace Inquizition.Controllers
                 ModelState.AddModelError(string.Empty, "Error: Card " + violatingAreas + "contains profanity >:(");
                 return View();
             }
-            return View();
+            // Determine color on first card and update database
+            newCard.CardColor = _flashCardManager.RetrieveCardColor(newCard.InquizitorName);
+            if (newCard.CardColor == null)
+            {
+                // User did not set a value. Set default
+                if (newCard.CardColor == null)
+                {
+                    newCard.CardColor = "bg-primary";
+                }
+                AddColorTheme(newCard.CardColor, newCard.InquizitorName);
+            }
+            newCard.Creator = User.Identity.Name;
+            // Method will call SaveChanges() and update the ColorTheme add above as well
+            // Implicit upcast polymorphism in method parameter
+            // This condition should never execute bc other logic is implemented to restrict creates at max cap
+            if (!_flashCardManager.AddFlashCard(newCard))
+            {
+                ModelState.AddModelError(string.Empty, "Error: Inquizitor at max capacity");
+                return View();
+            }
+            // Generate list of card entries for this inquizitor
+            _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
+            // Copy values to input card before newCard is out of scope
+            return View(newCard);
+        }
+
+        private void AddColorTheme(string color, string name)
+        {
+            ColorTheme newColorEntry = new ColorTheme
+            {
+                Color = color,
+                InquizitorName = name
+            };
+            _dbContext.ColorTheme.Add(newColorEntry);
+            _dbContext.SaveChanges();
         }
 
         public IActionResult MidSummary(string type, string inquizName)
