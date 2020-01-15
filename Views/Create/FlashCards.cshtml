@@ -1,14 +1,14 @@
 ﻿@{
     ViewData["Title"] = "FlashCards";
 }
-@model Inquizition.Models.IFlashCards
+@model Inquizition.Models.InputFlashCard
 
 <section>
     <header class="jumbotron p-0 text-center">
-        <h1 class="p-0 mb-1" style="color: #00a9ff">@Model.InputCard.InquizitorName</h1>
+        <h1 class="p-0 mb-1" style="color: #00a9ff">@Model.InquizitorName</h1>
         <span class="lead">Flash Cards</span>
         <br />
-        @if (Model.InputCard.IsPrivate)
+        @if (Model.IsPrivate)
         {
             <span class="lead">Private</span>
         }
@@ -19,34 +19,34 @@
     </header>
     <!-- Display prior cards -->
     <!-- Set Card Theme -->
-    @if (Model.InputCard.CardColor == null)
+    @if (Model.CardColor == null)
     {
         <h4>Choose a card color:</h4><br />
         <div class="row">
             <div class="col-2">
                 <label class="radio_container" for="blue">
                     Blue
-                    <input type="radio" id="blue" asp-for="InputCard.CardColor" value="bg-primary" form="cardForm" />
+                    <input type="radio" id="blue" asp-for="CardColor" value="bg-primary" form="cardForm" />
                     <span class="checkmark"></span>
                 </label>
                 <label class="radio_container" for="red">
                     Red
-                    <input type="radio" id="red" asp-for="InputCard.CardColor" value="bg-danger" form="cardForm" />
+                    <input type="radio" id="red" asp-for="CardColor" value="bg-danger" form="cardForm" />
                     <span class="checkmark"></span>
                 </label>
                 <label class="radio_container" for="yellow">
                     Yellow
-                    <input type="radio" id="yellow" asp-for="InputCard.CardColor" value="bg-warning" form="cardForm" />
+                    <input type="radio" id="yellow" asp-for="CardColor" value="bg-warning" form="cardForm" />
                     <span class="checkmark"></span>
                 </label>
                 <label class="radio_container" for="grey">
                     Grey
-                    <input type="radio" id="grey" asp-for="InputCard.CardColor" value="bg-secondary" form="cardForm" />
+                    <input type="radio" id="grey" asp-for="CardColor" value="bg-secondary" form="cardForm" />
                     <span class="checkmark"></span>
                 </label>
                 <label class="radio_container" for="green">
                     Green
-                    <input type="radio" id="green" asp-for="InputCard.CardColor" value="bg-success" form="cardForm" />
+                    <input type="radio" id="green" asp-for="CardColor" value="bg-success" form="cardForm" />
                     <span class="checkmark"></span>
                 </label>
             </div>
@@ -67,14 +67,14 @@
                     <div id="whole-card" class="flip m-0 p-0">
                         <div class="flip_front w-100">
                             <div class="card">
-                                <div class="card-body @Model.InputCard.CardColor">
+                                <div class="card-body @Model.CardColor">
                                     @f.CardNumber
                                 </div>
                             </div>
                         </div>
                         <div class="flip_back w-100">
                             <div class="card">
-                                <div class="card-body @Model.InputCard.CardColor">
+                                <div class="card-body @Model.CardColor">
                                     @f.CardAnswer
                                 </div>
                             </div>
@@ -93,20 +93,20 @@
                     <div class="flip_front w-100">
                         <div class="card">
                             <div id="body" class="card-body">
-                                <textarea rows="8" class="form-control text-center" asp-for="InputCard.CardBody" placeholder="Enter Body" style="display: block; height: 100%;"></textarea>
+                                <textarea rows="8" class="form-control text-center" asp-for="CardBody" placeholder="Enter Body" style="display: block; height: 100%;"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="flip_back w-100">
                         <div class="card">
                             <div id="answer" class="card-body">
-                                <textarea rows="8" class="form-control text-center" asp-for="InputCard.CardAnswer" placeholder="Enter Answer" style="display: block; height: 100%;"></textarea>
+                                <textarea rows="8" class="form-control text-center" asp-for="CardAnswer" placeholder="Enter Answer" style="display: block; height: 100%;"></textarea>
                             </div>
                         </div>
                     </div>
                     <!-- Add values that do not require user input -->
-                    <input type="hidden" asp-for="InputCard.InquizitorName" value="@Model.InputCard.InquizitorName" />
-                    <input type="hidden" asp-for="InputCard.IsPrivate" value="@Model.InputCard.IsPrivate" />
+                    <input type="hidden" asp-for="InquizitorName" value="@Model.InquizitorName" />
+                    <input type="hidden" asp-for="IsPrivate" value="@Model.IsPrivate" />
                 </form>
             </div>
         </div>
