@@ -14,4 +14,13 @@ namespace Inquizition.Models
         [Required]
         public bool IsPrivate { get; set; }
     }
+
+    public class ColorTheme
+    {
+        public int ID { get; set; }
+
+        public string Color { get; set; }
+
+        public string InquizitorName { get; set; }
+    }
 }
