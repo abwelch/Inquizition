@@ -4,14 +4,16 @@ using Inquizition.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Inquizition.Migrations
 {
     [DbContext(typeof(InquizitionContext))]
-    partial class InquizitionContextModelSnapshot : ModelSnapshot
+    [Migration("20200114061434_CreateColorTable")]
+    partial class CreateColorTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,20 +46,28 @@ namespace Inquizition.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Audio")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CardAnswer")
                         .IsRequired()
                         .HasColumnType("nvarchar(400)")
                         .HasMaxLength(400);
 
                     b.Property<string>("CardBody")
-                        .IsRequired()
                         .HasColumnType("nvarchar(400)")
                         .HasMaxLength(400);
+
+                    b.Property<string>("CardColor")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CardNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("Creator")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InquizitorName")
