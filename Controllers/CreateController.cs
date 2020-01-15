@@ -71,6 +71,7 @@ namespace Inquizition.Controllers
         [HttpGet]
         public IActionResult FlashCards(string InquizitorName, bool IsPrivate)
         {
+            ViewData["Profanity"] = false;
             InputFlashCard InputCard = new InputFlashCard
             {
                 InquizitorName = InquizitorName,
@@ -84,16 +85,11 @@ namespace Inquizition.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FlashCards(InputFlashCard newCard)
         {
+            ViewData["Profanity"] = false;
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Error: Invalid Input");
-                return View();
-            }
-            string violatingAreas = _flashCardManager.CardContainsProfanity(newCard);
-            if (violatingAreas != string.Empty)
-            {
-                ModelState.AddModelError(string.Empty, "Error: Card " + violatingAreas + "contains profanity >:(");
-                return View();
+                _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
+                return View(newCard);
             }
             // Assign random value to users not logged in
             // Will only execute once and then pass random value each subsequent time from view
@@ -112,12 +108,20 @@ namespace Inquizition.Controllers
                 newCard.FirstCard = false;
                 AddColorTheme(newCard.CardColor, newCard.InquizitorName);
             }
+            string violatingAreas = _flashCardManager.CardContainsProfanity(newCard);
+            if (violatingAreas != string.Empty)
+            {
+                ViewData["Profanity"] = true;
+                _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
+                return View(newCard);
+            }
             // Implicit upcast polymorphism in method parameter
             // This condition should never execute bc other logic is implemented to restrict creates at max cap
             if (!_flashCardManager.AddFlashCard(newCard))
             {
-                ModelState.AddModelError(string.Empty, "Error: Inquizitor at max capacity");
-                return View();
+                ViewData["MaxCap"] = true;
+                _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
+                return View(newCard);
             }
             // Generate list of card entries for this inquizitor
             _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
