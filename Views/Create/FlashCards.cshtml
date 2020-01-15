@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-2">
                 <label class="radio_container" for="blue">
-                    Blue
+                    Blue (default)
                     <input type="radio" id="blue" asp-for="CardColor" value="bg-primary" form="cardForm" />
                     <span class="checkmark"></span>
                 </label>
@@ -68,15 +68,15 @@
                     <div id="@i.ToString()" class="flip m-0 p-0">
                         <div class="flip_front w-100">
                             <div class="card">
-                                <div class="card-body @Model.CardColor">
-                                    <span>@Model.Inquizitor[i].CardBody</span>
+                                <div class="text-center card-body @Model.CardColor">
+                                    <p style="display:block; width:100%; height:100%">@Model.Inquizitor[i].CardBody</p>
                                 </div>
                             </div>
                         </div>
                         <div class="flip_back w-100">
                             <div class="card">
-                                <div class="card-body @Model.CardColor">
-                                    <span>@Model.Inquizitor[i].CardAnswer</span>
+                                <div class="text-center card-body @Model.CardColor">
+                                    <p style="display:block; width:100%; height:100%">@Model.Inquizitor[i].CardAnswer</p>
                                 </div>
                             </div>
                         </div>
@@ -93,23 +93,29 @@
         <input type="hidden" asp-for="FirstCard" value="false" form="cardForm" />
     }
     <!-- Card Input -->
-    <script>ClearInputCard();</script>
+    @if ((bool)ViewData["Profanity"])
+    {
+        <div class="row justify-content-center">
+            <span class="text-danger">Error: Your input contains profanity</span>
+        </div>
+    }
     <div class="row justify-content-center" onload="ClearInputCard()">
         <div class="col-10 col-sm-8 col-md-6 flip_container">
             <div id="whole-card" class="flip m-0 p-0">
                 <form asp-controller="Create" asp-action="FlashCards" id="cardForm">
-                    <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="flip_front w-100">
                         <div class="card">
-                            <div id="body" class="card-body">
+                            <div id="body" class="card-body @Model.CardColor">
                                 <textarea rows="8" id="front-input" class="form-control text-center" asp-for="CardBody" placeholder="Enter Body" style="display: block; height: 100%;"></textarea>
+                                <span asp-validation-for="CardBody" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
                     <div class="flip_back w-100">
                         <div class="card">
-                            <div id="answer" class="card-body">
+                            <div id="answer" class="card-body @Model.CardColor">
                                 <textarea rows="8" id="back-input" class="form-control text-center" asp-for="CardAnswer" placeholder="Enter Answer" style="display: block; height: 100%;"></textarea>
+                                <span asp-validation-for="CardAnswer" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -143,3 +149,5 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <partial name="_ValidationScriptsPartial" />
 }
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script>ClearInputCard();</script>
