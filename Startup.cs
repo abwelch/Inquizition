@@ -40,7 +40,7 @@ namespace Inquizition
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddScoped<IFlashCards, FlashCards>();
+            services.AddTransient<IFlashCardManager, FlashCardManager>();
 
             services.Configure<IdentityOptions>(options =>
             {
