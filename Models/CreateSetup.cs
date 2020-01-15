@@ -8,7 +8,6 @@ namespace Inquizition.Models
         public string InquizitorName { get; set; }
 
         [Required]
-        [StringLength(55, MinimumLength = 3)]
         public string SelectedAssessment { get; set; }
 
         [Required]
