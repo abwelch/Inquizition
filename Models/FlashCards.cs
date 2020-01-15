@@ -7,43 +7,54 @@ using Inquizition.Data;
 
 namespace Inquizition.Models
 {
-    public interface IFlashCards
+    public interface IFlashCardManager
     {
-        public List<FlashCardEntry> Inquizitor { get; set; }
+        public string RetrieveCardColor(string inquizName);
 
-        public FlashCardEntry ExampleCard { get; set; }
-
-        public bool ColorSet { get; set; }
+        public bool AddFlashCard(FlashCardEntry card);
 
         public bool InquizitorNameAvailable(string input);
 
         public string CardContainsProfanity(FlashCardEntry card);
 
-        public bool AddFlashCard(FlashCardEntry card);
+        public int TotalEntries(string inquizName);
 
+        public void RetrieveAllCards(List<FlashCardEntry> Inquizitor, string inquizName);
     }
 
-    public class FlashCards : IFlashCards
+    public class FlashCardManager : IFlashCardManager
     {
         private readonly InquizitionContext _dbContext;
+        private const int MaxCapacity = 50;
 
-        public List<FlashCardEntry> Inquizitor { get; set; }
-
-        public FlashCardEntry ExampleCard { get; set; }
-
-        public bool ColorSet { get; set; }
-
-        public FlashCards(InquizitionContext dbContext)
+        public FlashCardManager(InquizitionContext dbContext)
         {
             _dbContext = dbContext;
-            Inquizitor = new List<FlashCardEntry>();
         }
 
         public bool AddFlashCard(FlashCardEntry newCard)
         {
-        
+            int total = TotalEntries(newCard.InquizitorName);
+            if (total >= MaxCapacity)
+            {
+                return false;
+            }
+            newCard.CardNumber = total + 1;
+            _dbContext.FlashCards.Add(newCard);
+            _dbContext.SaveChanges();
             return true;
         }
+
+        public string RetrieveCardColor(string inquziName)
+        {
+            var entry = _dbContext.ColorTheme.FirstOrDefault(c => c.InquizitorName == inquziName);
+            if (entry == null)
+                return string.Empty;
+           return entry.Color;
+        }
+
+        public int TotalEntries(string inquizName) =>
+            _dbContext.FlashCards.Count(f => f.InquizitorName == inquizName);
 
         public bool InquizitorNameAvailable(string inputtedName) =>
             _dbContext.FlashCards.FirstOrDefault(f => f.InquizitorName == inputtedName) == null ? true : false;
@@ -61,8 +72,26 @@ namespace Inquizition.Models
             }
             return violatingSections;
         }
+
+        public void RetrieveAllCards(List<FlashCardEntry> Inquizitor, string inquizName)
+        {
+            // Ensure empty before retrieving all elements in inquizitor
+            if (Inquizitor.Count != 0)
+            {
+                Inquizitor.Clear();
+            }
+            foreach (FlashCardEntry f in _dbContext.FlashCards)
+            {
+                if (f.InquizitorName == inquizName)
+                {
+                    Inquizitor.Add(f);
+                }
+            }
+        }
+
     }
 
+    // Table schema class
     public class FlashCardEntry
     {
         public int ID { get; set; }
@@ -76,17 +105,25 @@ namespace Inquizition.Models
 
         public int CardNumber { get; set; }
 
+        [Required]
         [StringLength(400)]
         public string CardBody { get; set; }
 
         [Required]
         [StringLength(400)]
         public string CardAnswer { get; set; }
+    }
 
+    // Class utilized for view input processing
+    public class InputFlashCard : FlashCardEntry
+    {
         public string CardColor { get; set; }
 
-        public string Image { get; set; }
+        public List<FlashCardEntry> Inquizitor { get; set; }
 
-        public string Audio { get; set; }
+        public InputFlashCard ShallowCopy()
+        {
+            return (InputFlashCard)this.MemberwiseClone();
+        }
     }
 }
