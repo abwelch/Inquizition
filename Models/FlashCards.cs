@@ -97,7 +97,6 @@ namespace Inquizition.Models
 
         public string Creator { get; set; }
 
-        [StringLength(55, MinimumLength = 3)]
         public string InquizitorName { get; set; }
 
         public bool IsPrivate { get; set; }
@@ -105,11 +104,11 @@ namespace Inquizition.Models
         public int CardNumber { get; set; }
 
         [Required]
-        [StringLength(400)]
+        [StringLength(400, ErrorMessage = "Card body can be no more than 400 characters.")]
         public string CardBody { get; set; }
 
         [Required]
-        [StringLength(400)]
+        [StringLength(400, ErrorMessage = "Card answer can be no more than 400 characters.")]
         public string CardAnswer { get; set; }
     }
 
