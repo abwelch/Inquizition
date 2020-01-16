@@ -5,39 +5,44 @@
     ViewData["Title"] = "Home Page";
 }
 
-<section class="text-center lead introduction">
-    @if (User.Identity.IsAuthenticated)
-    {
-        <!-- Should never execute -->
-        @if (Model == null)
+    <section class="text-center lead introduction">
+        @if (User.Identity.IsAuthenticated)
         {
-            <header class="row">
-                <div class="col">
-                    <span class="alert alert-danger">@ViewData["homeNullAuthenticatedUser"]</span>
-                </div>
-            </header>
-        }
-        else
-        {
-            <!-- Logged in content -->
-            <header class="row">
-                <div class="col">
-                    <h2 class="display-4">Welcome back - <span style="color: lightgreen;">@User.Identity.Name</span>!</h2>
-                    @if (!Model.EmailConfirmed)
-                    {
-                        <span>
-                            Verify your email to share content with friends:
-                            <a asp-area="Identity" asp-page="/Account/Manage/Email">verify</a>
-                        </span>
-                    }
-                    @if (!Model.IntroCompleted)
-                    {
-                        <aside class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></aside>
+            <!-- Should never execute -->
+            @if (Model == null)
+            {
+                <header class="row">
+                    <div class="col">
+                        <span class="alert alert-danger">@ViewData["homeNullAuthenticatedUser"]</span>
+                    </div>
+                </header>
+            }
+            else
+            {
+                <!-- Logged in content -->
+                <header class="row">
+                    <div class="col">
+                        <h2 class="display-4">Welcome back - <span style="color: lightgreen;">@User.Identity.Name</span>!</h2>
+                        @if (!Model.EmailConfirmed)
+                        {
+                            <span>
+                                Verify your email to share content with friends:
+                                <a asp-area="Identity" asp-page="/Account/Manage/Email">verify</a>
+                            </span>
+                        }
+                        @if (!Model.IntroCompleted)
+                        {
+                            <aside class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></aside>
 
-                    }
-                    <hr />
-                </div>
-            </header>
+                        }
+                        <hr />
+                    </div>
+                </header>
+                @if(Model.TotalSets > 0)
+                {
+
+                }
+                <!--
             <article>
                 <header class="row">
                     <div class="col">
@@ -52,18 +57,18 @@
                     </div>
                 </div>
             </article>
-
+            -->
+            }
         }
-    }
-    else
-    {
-        <!-- Content for not logged in -->
-        <header class="row">
-            <div class="col">
-                <h2 class="display-4">Welcome to Inquizition</h2>
-                <aside class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></aside>
-                <hr />
-            </div>
-        </header>
-    }
-</section>
+        else
+        {
+            <!-- Content for not logged in -->
+            <header class="row">
+                <div class="col">
+                    <h2 class="display-4">Welcome to Inquizition</h2>
+                    <aside class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></aside>
+                    <hr />
+                </div>
+            </header>
+        }
+    </section>
