@@ -152,6 +152,12 @@ namespace Inquizition.Controllers
                 TotalEntries = total,
                 Authenticated = loggedIn
             };
+            if (loggedIn)
+            {
+                var user = _dbContext.UserOverviewInfo.FirstOrDefault(u => u.Username == User.Identity.Name);
+                _dbContext.UserOverviewInfo.Update(user);
+                _dbContext.SaveChanges();
+            }
             return View(summary);
         }
 
