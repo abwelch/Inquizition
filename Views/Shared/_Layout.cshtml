@@ -30,7 +30,9 @@
                                     Inquizitors
                                 </a>
                                 <div class="dropdown-menu">
+                                    <!--
                                     <a class="dropdown-item" href="#">Public</a>
+                                        -->
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-controller="Create" asp-action="Index">Create</a>
                                     @if (User.Identity.IsAuthenticated)
@@ -53,7 +55,7 @@
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" href="#">Login to access</a>
+                                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login to Access</a>
                                     }
                                 </div>
                             </div>
@@ -76,7 +78,6 @@
                                 </a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" asp-controller="Help" asp-action="Index">Introduction</a>
-                                    <a class="dropdown-item" href="#">FAQ</a>
                                     <a class="dropdown-item" href="#">Report Bug</a>
                                 </div>
                             </div>

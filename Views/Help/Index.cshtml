@@ -3,7 +3,7 @@
 }
 @model Inquizition.Models.UserInfo
 
-<section class="text-left introduction">
+<section class="text-left introduction" style="font-size:x-large;">
     <header class="row">
         <div class="col">
             <h1 class="display-3 text-center">Introduction</h1>
@@ -128,7 +128,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <p>
-                            <a asp-controller="Create" asp-action="Index">Create</a> an Inquizitor!
+                            <a asp-controller="Create" asp-action="Index" class="text-warning" style="border: dashed">Create</a> an Inquizitor!
                             <br />
                             Contribute to the public section by setting your new Inquizator to public.
                             <br />
@@ -139,7 +139,7 @@
                     else
                     {
                         <p>
-                            <a asp-area="Identity" asp-page="/Account/Register">Register</a> an account!
+                            <a asp-area="Identity" asp-page="/Account/Register" class="text-warning" style="border: dashed">Register</a> an account!
                             <br />
                             Creating an account allows you to save created Inquizitors,
                             add friends, comment on public Inquizitors, and more!

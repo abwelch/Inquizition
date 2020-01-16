@@ -119,6 +119,8 @@ namespace Inquizition.Models
 
         public bool FirstCard { get; set; }
 
+        public bool ConfirmedPublish { get; set; }
+
         public List<FlashCardEntry> Inquizitor { get; set; }
 
         public InputFlashCard()

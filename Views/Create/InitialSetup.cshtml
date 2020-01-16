@@ -36,11 +36,13 @@
                 <div class="col-7 col-md-5">
                     <form asp-controller="Create" asp-action="InitialSetup">
                         <h4>Choose assessment type:</h4><br />
+
                         <label class="radio_container" for="flashcards">
                             Flash Cards
                             <input type="radio" checked="checked" id="flashcards" asp-for="SelectedAssessment" value="flashcards" />
                             <span class="checkmark"></span>
                         </label>
+                        <!--
                         <label class="radio_container" for="quiz">
                             Quiz
                             <input type="radio" id="quiz" asp-for="SelectedAssessment" value="quiz" />
@@ -51,6 +53,8 @@
                             <input type="radio" id="twocolumn" asp-for="SelectedAssessment" value="twocolumn" />
                             <span class="checkmark"></span>
                         </label>
+                         -->
+
                         <br />
                         <h4>Input Inquizitor name:</h4><br />
                         <input type="text" asp-for="InquizitorName" class="mb-4 form-control input-lg" />

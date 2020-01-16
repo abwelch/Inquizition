@@ -85,6 +85,10 @@ namespace Inquizition.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FlashCards(InputFlashCard newCard)
         {
+            if (newCard.ConfirmedPublish)
+            {
+
+            }
             ViewData["Profanity"] = false;
             if (!ModelState.IsValid)
             {
@@ -100,6 +104,8 @@ namespace Inquizition.Controllers
             }
             if (newCard.FirstCard == true)
             {
+                // Track published
+                AddPublishedTab(newCard.InquizitorName);
                 if (newCard.CardColor == null)
                 {
                     // Set default color
@@ -126,6 +132,17 @@ namespace Inquizition.Controllers
             // Generate list of card entries for this inquizitor
             _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
             return View(newCard);
+        }
+
+        private void AddPublishedTab(string name)
+        {
+            Publish entry = new Publish
+            {
+                InquizitorName = name,
+                Published = false,
+            };
+            _dbContext.Publish.Add(entry);
+            _dbContext.SaveChanges();
         }
 
         private void AddColorTheme(string color, string name)
