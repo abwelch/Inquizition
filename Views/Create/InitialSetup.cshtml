@@ -20,23 +20,13 @@
             <div class="col text-center">
                 <h1 class="display-4">Initial Setup</h1>
                 <hr />
-                <span class="alert alert-danger">
-                    @ViewData["creationWontSave"]
-                    @if (ViewData["creationWontSave"] != null)
-                    {
-                        <br />
-                    }
-                    @ViewData["wontShare"]
-                </span>
-                <br />
             </div>
         </header>
         <article>
             <div class="row">
                 <div class="col-7 col-md-5">
                     <form asp-controller="Create" asp-action="InitialSetup">
-                        <h4>Choose assessment type:</h4><br />
-
+                        <h4>Choose assessment type:</h4>
                         <label class="radio_container" for="flashcards">
                             Flash Cards
                             <input type="radio" checked="checked" id="flashcards" asp-for="SelectedAssessment" value="flashcards" />
@@ -56,11 +46,11 @@
                          -->
 
                         <br />
-                        <h4>Input Inquizitor name:</h4><br />
-                        <input type="text" asp-for="InquizitorName" class="mb-4 form-control input-lg" />
+                        <h4>Input Inquizitor name:</h4>
                         <span asp-validation-for="InquizitorName" class="text-danger"></span>
+                        <input type="text" asp-for="InquizitorName" class="mb-4 form-control input-lg" />
                         <br />
-                        <h4>Choose the access level:</h4><br />
+                        <h4>Choose the access level:</h4>
                         <label class="radio_container" for="private">
                             Private
                             <input type="radio" checked="checked" id="private" asp-for="IsPrivate" value="true" />

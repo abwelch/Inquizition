@@ -85,6 +85,7 @@ namespace Inquizition.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FlashCards(InputFlashCard newCard)
         {
+            // Confirmed publish
             if (newCard.ConfirmedPublish)
             {
 
