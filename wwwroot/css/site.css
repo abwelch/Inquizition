@@ -12,6 +12,10 @@ a {
     color: #00a9ff;
 }
 
+main {
+    font-size: 22px;
+}
+
 a:hover {
     text-decoration: underline;
     color: #00a9ff;
@@ -71,6 +75,10 @@ h4 {
 
 #logout:hover {
     text-decoration: underline;
+}
+
+.btn {
+    font-size: x-large;
 }
 
 #toggle-boi {
@@ -142,9 +150,14 @@ body {
   color: white;
 }
 
+.nav-item {
+    font-weight: bold;
+}
+
 .nav-item:hover {
     text-decoration: underline;
 }
+
 #email {
     font-size: large;
     margin-bottom: 10px;
@@ -193,7 +206,7 @@ textarea {
     padding-left: 35px;
     margin-bottom: 12px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 22px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
