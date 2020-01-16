@@ -13,10 +13,18 @@ namespace Inquizition.Controllers
     {
         private readonly InquizitionContext _dbContext;
         private readonly IFlashCardManager _flashCardManager;
-        public CreateController(InquizitionContext dbcontext, IFlashCardManager flashCardManager)
+        private readonly IPublishManager _publishManager;
+        public CreateController(InquizitionContext dbcontext, IFlashCardManager flashCardManager, IPublishManager publishManager)
         {
             _dbContext = dbcontext;
             _flashCardManager = flashCardManager;
+            _publishManager = publishManager;
+             /* 
+             * This is shit design and flashcard view should dynamically generate new input cards and then send
+             * all forms using [frombody] to a list in the controller. This would eliminate much of the database
+             * access and elimnate need to call this function to remove unassigned cards
+             */
+            _publishManager.RemoveUnpublished();
         }
 
         public IActionResult Index()
@@ -135,6 +143,18 @@ namespace Inquizition.Controllers
             return View(newCard);
         }
 
+        public IActionResult PublishSummary(string inquizName, int total, bool loggedIn, string type)
+        {
+            PublishSummary summary = new PublishSummary
+            {
+                Title = inquizName,
+                AssessmentType = type,
+                TotalEntries = total,
+                Authenticated = loggedIn
+            };
+            return View(summary);
+        }
+
         private void AddPublishedTab(string name)
         {
             Publish entry = new Publish
@@ -155,18 +175,6 @@ namespace Inquizition.Controllers
             };
             _dbContext.ColorTheme.Add(newColorEntry);
             _dbContext.SaveChanges();
-        }
-
-        public IActionResult MidSummary(string type, string inquizName)
-        {
-
-            return View();
-        }
-
-        public IActionResult FinalSummary(string type, string inquizName)
-        {
-
-            return View();
         }
 
         public void Authenticate()

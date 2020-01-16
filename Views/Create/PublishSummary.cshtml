@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Publish Summary";
+}
+@model Inquizition.Models.PublishSummary
+
+<section class="text-center">
+    <header class="row">
+        <div class="col text-center">
+            <h1 class="display-3">Summary</h1>
+            <hr />
+        </div>
+    </header>
+    @if (Model.Authenticated)
+    {
+        <div class="row">
+            <div class="col">
+                <span class="alert alert-success">Inquizitor successfully created! Here are the stats:</span>
+                <p>
+                    <b>Inquizitor Title:</b> @Model.Title <br />
+                    <b>Inquizitor Type:</b> @Model.AssessmentType <br />
+                    <b>Total Cards:</b> @Model.TotalEntries <br />
+                </p>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col">
+                <p>Navigate to "Manage" under "Inquizitors" to view your new creation.</p> <br />
+                <a asp-controller="Manage" asp-action="Index" class="btn btn-primary">Go to Manage</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col">
+                <span class="text-danger">Your Inquizitor has not been saved because you are not logged in!</span>
+                <br />
+                <br />
+                <br />
+                <p>
+                    Either register or log in to save your Inquizitor.
+                </p>
+                <a class="btn btn-primary mr-5" asp-area="Identity" asp-page="/Account/Register" asp-route-saveInquiz="true">Register</a>
+                <a class="btn btn-primary ml-5" asp-area="Identity" asp-page="/Account/Login" asp-route-saveInquiz="true">Login</a>
+                <br />
+                <br />
+                <p class="text-danger">
+                    Note: You must click one of these buttons or your Inquizitor will be lost.
+                </p>
+            </div>
+        </div>
+    }
+</section>

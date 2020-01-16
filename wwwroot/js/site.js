@@ -20,3 +20,7 @@ function FlipCurrent() {
 function FlipCreated(cardID) {
     document.getElementById(cardID).classList.toggle("flip-counter");
 }
+
+function ConfirmPublish() {
+    document.getElementById("publish").value = true;
+}
