@@ -5,7 +5,7 @@
 
 <section>
     <header class="jumbotron p-0 text-center">
-        <h1 class="p-0 mb-1" style="color: #00a9ff">@Model.InquizitorName</h1>
+        <h1 class="p-0" style="color: #00a9ff">@Model.InquizitorName</h1>
         <span class="lead">Flash Cards</span>
         <br />
         @if (Model.IsPrivate)
@@ -17,12 +17,24 @@
             <span class="lead">Public</span>
         }
     </header>
+    <!-- Warning displayed if not logged in -->
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <div class="row text-center">
+            <div class="col">
+                <span class="text-warning text-center">Warning: You are not logged in.
+                You will be required to log in/register upon publishing your Inquizitor.</span>
+            </div>
+        </div>
+        <br />
+    }
     <!-- Warning displayed if leaving page without submitting -->
     <div class="row">
         <div class="col">
-            <span id="leavePageWarning" class="alert alert-danger text-center" style="display: none;">Warning: Leaving page without publishing will erase all work!</span>
+            <span id="leavePageWarning" class="text-danger text-center" style="display: none;">Warning: Leaving page without publishing will erase all work!</span>
         </div>
     </div>
+    <br />
     <!-- Set Card Theme -->
     @if (Model.FirstCard)
     {
@@ -137,6 +149,7 @@
                         <!-- Add values that do not require user input -->
                         <input type="hidden" asp-for="InquizitorName" value="@Model.InquizitorName" />
                         <input type="hidden" asp-for="IsPrivate" value="@Model.IsPrivate" />
+                        <input id="publish" type="hidden" asp-for="ConfirmedPublish" value="false" />
                         @if (User.Identity.IsAuthenticated)
                         {
                             <input type="hidden" asp-for="Creator" value="@User.Identity.Name" />
@@ -151,7 +164,7 @@
         </div>
         <br />
         <div class="row justify-content-center">
-            <button class="btn btn-primary mt-3 mt-md-5 p-4" style="font-size:large;" onclick="FlipCurrent()">Flip</button>
+            <button class="btn btn-primary mt-3 mt-md-5 p-3" style="font-size:x-large;" onclick="FlipCurrent()">Flip</button>
         </div>
     }
     else
@@ -162,17 +175,24 @@
             </div>
         </div>
     }
+
     <div class="row justify-content-end">
         <button type="submit" form="cardForm" onclick="submitFormOkay = true;" class="btn btn-secondary mr-2" style="font-size:x-large;">Create Card</button>
     </div>
     <br />
-    <br />
-    <hr />
-    <div id="bottom" class="row justify-content-center">
-        <a onclick="submitFormOkay = true;" class="btn btn-success mb-3" style="font-size:xx-large;">Publish Inquizitor</a>
-    </div>
+    @if (Model.Inquizitor.Count > 0)
+    {
+        <br />
+        <hr />
+        <div id="bottom" class="row justify-content-center">
+            <a onclick="submitFormOkay = true; ConfirmPublish();" class="btn btn-success mb-3" style="font-size:xx-large;"
+               asp-controller="Create" asp-action="PublishSummary" asp-route-inquizName="@Model.InquizitorName"
+               asp-route-total="@Model.Inquizitor.Count" asp-route-loggedIn="@User.Identity.IsAuthenticated"
+               asp-route-type="Flash Cards">Publish Inquizitor</a>
+        </div>
+    }
 </section>
- 
+
 @section Scripts {
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <partial name="_ValidationScriptsPartial" />
