@@ -10,8 +10,6 @@ namespace Inquizition.Models
     {
         public int ID { get; set; }
 
-
-
         public string InquizitorName { get; set; }
 
         public bool Published { get; set; }
@@ -19,7 +17,7 @@ namespace Inquizition.Models
 
     public interface IPublishManager
     {
-        public void RemoveUnpublished(string name);
+        public void RemoveUnpublished();
     }
 
     public class PublishManager : IPublishManager
@@ -31,21 +29,17 @@ namespace Inquizition.Models
             _dbContext = dbContext;
         }
 
-        public void RemoveUnpublished(string inquizName)
+        public void RemoveUnpublished()
         {
-
-
-
-            /*
             var inquizToDelete = _dbContext.Publish.Where(p => p.Published == false);
             foreach (Publish p in inquizToDelete)
             {
                 var entryToDelete = _dbContext.FlashCards.Where(f => f.InquizitorName == p.InquizitorName);
                 foreach (FlashCardEntry f in entryToDelete)
                 {
-
+                    _dbContext.FlashCards.Remove(f);
                 }
-            } */
+            }
         }
 
     }
