@@ -9,6 +9,8 @@ namespace Inquizition.Models
 {
     public interface IFlashCardManager
     {
+        public string DeleteFlagUsername { get; }
+
         public string RetrieveCardColor(string inquizName);
 
         public bool AddFlashCard(FlashCardEntry card);
@@ -20,12 +22,20 @@ namespace Inquizition.Models
         public int TotalEntries(string inquizName);
 
         public void RetrieveAllCards(List<FlashCardEntry> Inquizitor, string inquizName);
+
+        public void ClearUnathenticatedCards();
     }
 
     public class FlashCardManager : IFlashCardManager
     {
         private readonly InquizitionContext _dbContext;
         private const int MaxCapacity = 50;
+        private const string deleteFlagUsername = "$$$!!!$$$";
+
+        public string DeleteFlagUsername
+        {
+            get { return deleteFlagUsername; }
+        }
 
         public FlashCardManager(InquizitionContext dbContext)
         {
@@ -87,6 +97,17 @@ namespace Inquizition.Models
                     Inquizitor.Add(f);
                 }
             }
+        }
+
+        public void ClearUnathenticatedCards()
+        {
+            // Removes entries from FlashCard table
+            var toDeleteCards = _dbContext.FlashCards.Where(f => f.Creator == deleteFlagUsername);
+            foreach (FlashCardEntry f in toDeleteCards)
+            {
+                _dbContext.FlashCards.Remove(f);
+            }
+            _dbContext.SaveChanges();
         }
     }
 
