@@ -11,8 +11,6 @@ namespace Inquizition.Models
     {
         public string DeleteFlagUsername { get; }
 
-        public string RetrieveCardColor(string inquizName);
-
         public bool AddFlashCard(FlashCardEntry card);
 
         public bool InquizitorNameAvailable(string input);
@@ -24,6 +22,8 @@ namespace Inquizition.Models
         public void RetrieveAllCards(List<FlashCardEntry> Inquizitor, string inquizName);
 
         public void ClearUnathenticatedCards();
+
+        public List<string> RetrieveSetsAssociatedWithUser(string username)
     }
 
     public class FlashCardManager : IFlashCardManager
@@ -53,14 +53,6 @@ namespace Inquizition.Models
             _dbContext.FlashCards.Add(newCard);
             _dbContext.SaveChanges();
             return true;
-        }
-
-        public string RetrieveCardColor(string inquziName)
-        {
-            var entry = _dbContext.ColorTheme.FirstOrDefault(c => c.InquizitorName == inquziName);
-            if (entry == null)
-                return string.Empty;
-           return entry.Color;
         }
 
         public int TotalEntries(string inquizName) =>
@@ -108,6 +100,15 @@ namespace Inquizition.Models
                 _dbContext.FlashCards.Remove(f);
             }
             _dbContext.SaveChanges();
+        }
+
+        public List<string> RetrieveSetsAssociatedWithUser(string username)
+        {
+            List<string> setNames = new List<string>();
+            // Create a list of unique inquizitors associated with the user
+            setNames.Append(_dbContext.FlashCards.Where(f => f.Creator == username && !setNames.Contains(f.InquizitorName))
+                .Select(f => f.InquizitorName).ToString());
+            return setNames;
         }
     }
 
