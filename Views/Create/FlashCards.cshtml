@@ -3,211 +3,227 @@
 }
 @model Inquizition.Models.InputFlashCard
 
-<section>
+@if (ViewData["createNullAuthenticatedUser"] != null)
+{
     <header class="jumbotron p-0 text-center">
-        <h1 class="p-0" style="color: #00a9ff">@Model.InquizitorName</h1>
-        <span class="lead">Flash Cards</span>
-        <br />
-        @if (Model.IsPrivate)
+        <span class="alert alert-danger">@ViewData["createNullAuthenticatedUser"]</span>
+    </header>
+}
+else
+{
+    <section>
+        <header class="jumbotron p-0 text-center">
+            <h1 class="p-0 display-4" style="color: #00a9ff">@Model.InquizitorName</h1>
+            <span class="lead">Flash Cards</span>
+            <br />
+            @if (Model.IsPrivate)
+            {
+                <span class="lead">Private</span>
+            }
+            else
+            {
+                <span class="lead">Public</span>
+            }
+        </header>
+        <!-- Warning displayed if not logged in -->
+        @if (ViewData["creationWontSave"] != null)
         {
-            <span class="lead">Private</span>
+            <div class="row text-center">
+                <div class="col">
+                    <span class="text-warning text-center">
+                        @ViewData["creationWontSave"]
+                    </span>
+                </div>
+            </div>
+            <br />
+        }
+        <!-- Warning displayed if leaving page without submitting -->
+        <div class="row">
+            <div class="col">
+                <span id="leavePageWarning" class="text-danger text-center" style="display: none;">Warning: Leaving page without publishing will erase all work!</span>
+            </div>
+        </div>
+        @if (Model.FirstCard)
+        {
+            <!-- Set Card Theme -->
+            <h4>Choose a card color:</h4>
+            <div class="row">
+                <div class="col-2">
+                    <label class="radio_container" for="blue">
+                        Blue (default)
+                        <input type="radio" id="blue" asp-for="CardColor" value="bg-primary" form="cardForm" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio_container" for="red">
+                        Red
+                        <input type="radio" id="red" asp-for="CardColor" value="bg-danger" form="cardForm" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio_container" for="yellow">
+                        Yellow
+                        <input type="radio" id="yellow" asp-for="CardColor" value="bg-warning" form="cardForm" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio_container" for="grey">
+                        Grey
+                        <input type="radio" id="grey" asp-for="CardColor" value="bg-secondary" form="cardForm" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio_container" for="green">
+                        Green
+                        <input type="radio" id="green" asp-for="CardColor" value="bg-success" form="cardForm" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 col-sm-3">
+                    <button class="btn btn-primary mb-3" onclick="SetColor()">Confirm Color</button>
+                </div>
+            </div>
+            <input type="hidden" asp-for="FirstCard" value="@Model.FirstCard" form="cardForm" />
         }
         else
         {
-            <span class="lead">Public</span>
-        }
-    </header>
-    <!-- Warning displayed if not logged in -->
-    @if (!User.Identity.IsAuthenticated)
-    {
-        <div class="row text-center">
-            <div class="col">
-                <span class="text-warning text-center">Warning: You are not logged in.
-                You will be required to log in/register upon publishing your Inquizitor.</span>
+            <!-- Print all previous cards created for this Inquizitor -->
+            <div class="row justify-content-center" style="font-size:x-large">
+                <a class="btn btn-primary" href="#bottom">Bottom of Page</a>
             </div>
-        </div>
-        <br />
-    }
-    <!-- Warning displayed if leaving page without submitting -->
-    <div class="row">
-        <div class="col">
-            <span id="leavePageWarning" class="text-danger text-center" style="display: none;">Warning: Leaving page without publishing will erase all work!</span>
-        </div>
-    </div>
-    <br />
-    <!-- Set Card Theme -->
-    @if (Model.FirstCard)
-    {
-        <h4>Choose a card color:</h4>
-        <div class="row">
-            <div class="col-2">
-                <label class="radio_container" for="blue">
-                    Blue (default)
-                    <input type="radio" id="blue" asp-for="CardColor" value="bg-primary" form="cardForm" />
-                    <span class="checkmark"></span>
-                </label>
-                <label class="radio_container" for="red">
-                    Red
-                    <input type="radio" id="red" asp-for="CardColor" value="bg-danger" form="cardForm" />
-                    <span class="checkmark"></span>
-                </label>
-                <label class="radio_container" for="yellow">
-                    Yellow
-                    <input type="radio" id="yellow" asp-for="CardColor" value="bg-warning" form="cardForm" />
-                    <span class="checkmark"></span>
-                </label>
-                <label class="radio_container" for="grey">
-                    Grey
-                    <input type="radio" id="grey" asp-for="CardColor" value="bg-secondary" form="cardForm" />
-                    <span class="checkmark"></span>
-                </label>
-                <label class="radio_container" for="green">
-                    Green
-                    <input type="radio" id="green" asp-for="CardColor" value="bg-success" form="cardForm" />
-                    <span class="checkmark"></span>
-                </label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4 col-sm-3">
-                <button class="btn btn-primary mb-3" onclick="SetColor()">Confirm Color</button>
-            </div>
-        </div>
-        <input type="hidden" asp-for="FirstCard" value="@Model.FirstCard" form="cardForm" />
-    }
-    else
-    {
-        <div class="row justify-content-center" style="font-size:x-large">
-            <a class="btn btn-primary" href="#bottom">Bottom of Page</a>
-        </div>
-        <hr />
-        // Print all previous cards created in current inquizitor
-        for (int i = 1; i <= Model.Inquizitor.Count; i++)
-        {
-            <strong class="text-center">Card @i</strong>
-            <div class="row justify-content-center">
-                <div class="col-10 col-sm-8 col-md-6 flip_container">
-                    <div id="@i.ToString()" class="flip m-0 p-0">
-                        <div class="flip_front w-100">
-                            <div class="card">
-                                <div class="text-center card-body @Model.CardColor">
-                                    <textarea readonly rows="8" class="form-control text-center" style="display: block; height: 100%;">@Model.Inquizitor[i - 1].CardBody</textarea>
+            <hr />
+            for (int i = 1; i <= Model.Inquizitor.Count; i++)
+            {
+                <div class="row text-center">
+                    <div class="col">
+                        <strong>Card @i</strong>
+                    </div>
+                </div>
+                
+                <div class="row justify-content-center">
+                    <div class="col-10 col-sm-8 col-md-6 flip_container">
+                        <div id="@i.ToString()" class="flip m-0 p-0">
+                            <div class="flip_front w-100">
+                                <div class="card">
+                                    <div class="text-center card-body @Model.CardColor">
+                                        <textarea readonly rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.Inquizitor[i - 1].CardBody</textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="flip_back w-100">
-                            <div class="card">
-                                <div class="text-center card-body @Model.CardColor">
-                                    <textarea readonly rows="8" class="form-control text-center" style="display: block; height: 100%;">@Model.Inquizitor[i - 1].CardAnswer</textarea>
+                            <div class="flip_back w-100">
+                                <div class="card">
+                                    <div class="text-center card-body @Model.CardColor">
+                                        <textarea readonly rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.Inquizitor[i - 1].CardAnswer</textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="row justify-content-end">
+                    <button class="btn btn-primary" style="font-size:large;" onclick="FlipCreated(@i.ToString())">Flip</button>
+                </div>
+                <hr />
+            }
+            // Retain card color throughout posts
+            <input type="hidden" asp-for="CardColor" value="@Model.CardColor" form="cardForm" />
+            <input type="hidden" asp-for="FirstCard" value="@Model.FirstCard" form="cardForm" />
+        }
+        <!-- Card Input -->
+        @if ((bool)ViewData["Profanity"])
+        {
+            <div class="row justify-content-center">
+                <span class="text-danger">Error: Your input contains profanity</span>
             </div>
-            <div class="row justify-content-end">
-                <button class="btn btn-primary" style="font-size:large;" onclick="FlipCreated(@i.ToString())">Flip</button>
+        }
+        @if (Model.Inquizitor.Count < 50)
+        {
+            <div class="row justify-content-center">
+                <div class="col-10 col-sm-8 col-md-6 flip_container mb-3">
+                    <form asp-controller="Create" asp-action="FlashCards" id="cardForm">
+                        <div class="text-center">
+                            <span asp-validation-for="CardBody" class="text-danger"></span>
+                            <br />
+                            <span asp-validation-for="CardAnswer" class="text-danger"></span>
+                        </div>
+                        <div id="whole-card" class="flip m-0 p-0">
+                            <div class="flip_front w-100">
+                                <div class="card">
+                                    <div id="body" class="card-body @Model.CardColor">
+                                        <textarea rows="6" id="front-input" class="form-control text-center" asp-for="CardBody" 
+                                                  placeholder="Enter Body" style="display: block; height: 100%; font-size:x-large;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip_back w-100">
+                                <div class="card">
+                                    <div id="answer" class="card-body @Model.CardColor">
+                                        <textarea rows="6" id="back-input" class="form-control text-center" asp-for="CardAnswer" 
+                                                  placeholder="Enter Answer" style="display: block; height: 100%; font-size:x-large;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Add values that do not require user input -->
+                            <input type="hidden" asp-for="InquizitorName" value="@Model.InquizitorName" />
+                            <input type="hidden" asp-for="IsPrivate" value="@Model.IsPrivate" />
+                            <input id="publish" type="hidden" asp-for="ConfirmedPublish" value="false" />
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <input type="hidden" asp-for="Creator" value="@User.Identity.Name" />
+                            }
+                            else
+                            {
+                                <input type="hidden" asp-for="Creator" value="@Model.Creator" />
+                            }
+                        </div>
+                    </form>
+                </div>
             </div>
+            <br />
+            <div class="row justify-content-center">
+                <button class="btn btn-primary mt-5 p-2" style="font-size:x-large;" onclick="FlipCurrent()">Flip</button>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col">
+                    <h5 class="text-danger">You have hit the 50 card cap!</h5>
+                </div>
+            </div>
+        }
+
+        <div class="row justify-content-end">
+            <button type="submit" form="cardForm" onclick="submitFormOkay = true;" class="btn btn-secondary mr-2" style="font-size:x-large;">Create Card</button>
+        </div>
+        <br />
+        @if (Model.Inquizitor.Count > 0)
+        {
+            <br />
             <hr />
+            <div id="bottom" class="row justify-content-center">
+                <a onclick="submitFormOkay = true; ConfirmPublish();" class="btn btn-success mb-3" style="font-size:xx-large;"
+                   asp-controller="Create" asp-action="PublishSummary" asp-route-inquizName="@Model.InquizitorName"
+                   asp-route-total="@Model.Inquizitor.Count" asp-route-creator="@Model.Creator"
+                   asp-route-type="Flash Cards">Publish Inquizitor</a>
+            </div>
         }
-        // Retain card color throughout posts
-        <input type="hidden" asp-for="CardColor" value="@Model.CardColor" form="cardForm" />
-        <input type="hidden" asp-for="FirstCard" value="false" form="cardForm" />
-    }
-    <!-- Card Input -->
-    @if ((bool)ViewData["Profanity"])
-    {
-        <div class="row justify-content-center">
-            <span class="text-danger">Error: Your input contains profanity</span>
-        </div>
-    }
-    @if (Model.Inquizitor.Count < 50)
-    {
-        <div class="row justify-content-center">
-            <div class="col-10 col-sm-8 col-md-6 flip_container">
-                <form asp-controller="Create" asp-action="FlashCards" id="cardForm">
-                    <div class="text-center">
-                        <span asp-validation-for="CardBody" class="text-danger"></span>
-                        <br />
-                        <span asp-validation-for="CardAnswer" class="text-danger"></span>
-                    </div>
-                    <div id="whole-card" class="flip m-0 p-0">
-                        <div class="flip_front w-100">
-                            <div class="card">
-                                <div id="body" class="card-body @Model.CardColor">
-                                    <textarea rows="8" id="front-input" class="form-control text-center" asp-for="CardBody" placeholder="Enter Body" style="display: block; height: 100%;"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flip_back w-100">
-                            <div class="card">
-                                <div id="answer" class="card-body @Model.CardColor">
-                                    <textarea rows="8" id="back-input" class="form-control text-center" asp-for="CardAnswer" placeholder="Enter Answer" style="display: block; height: 100%;"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Add values that do not require user input -->
-                        <input type="hidden" asp-for="InquizitorName" value="@Model.InquizitorName" />
-                        <input type="hidden" asp-for="IsPrivate" value="@Model.IsPrivate" />
-                        <input id="publish" type="hidden" asp-for="ConfirmedPublish" value="false" />
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <input type="hidden" asp-for="Creator" value="@User.Identity.Name" />
-                        }
-                        else
-                        {
-                            <input type="hidden" asp-for="Creator" value="@Model.Creator" />
-                        }
-                    </div>
-                </form>
-            </div>
-        </div>
-        <br />
-        <div class="row justify-content-center">
-            <button class="btn btn-primary mt-3 mt-md-5 p-3" style="font-size:x-large;" onclick="FlipCurrent()">Flip</button>
-        </div>
-    }
-    else
-    {
-        <div class="row">
-            <div class="col">
-                <h5 class="text-danger">You have hit the 50 card cap!</h5>
-            </div>
-        </div>
+    </section>
+
+    @section Scripts {
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <partial name="_ValidationScriptsPartial" />
     }
 
-    <div class="row justify-content-end">
-        <button type="submit" form="cardForm" onclick="submitFormOkay = true;" class="btn btn-secondary mr-2" style="font-size:x-large;">Create Card</button>
-    </div>
-    <br />
-    @if (Model.Inquizitor.Count > 0)
-    {
-        <br />
-        <hr />
-        <div id="bottom" class="row justify-content-center">
-            <a onclick="submitFormOkay = true; ConfirmPublish();" class="btn btn-success mb-3" style="font-size:xx-large;"
-               asp-controller="Create" asp-action="PublishSummary" asp-route-inquizName="@Model.InquizitorName"
-               asp-route-total="@Model.Inquizitor.Count" asp-route-loggedIn="@User.Identity.IsAuthenticated"
-               asp-route-type="Flash Cards">Publish Inquizitor</a>
-        </div>
-    }
-</section>
-
-@section Scripts {
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        ClearInputCard()
+        // Create a variable that can be set upon form submission
+        var submitFormOkay = false;
+        window.onbeforeunload = function () {
+            if (!submitFormOkay) {
+                document.getElementById("leavePageWarning").style.display = "block";
+                // Custom message is not supported in many browsers
+                return "You are about to leave this order form. You will lose any information...";
+            }
+        }
+    </script>
 }
-
-<script src="~/js/site.js" asp-append-version="true"></script>
-<script>
-    ClearInputCard()
-    // Create a variable that can be set upon form submission
-    var submitFormOkay = false;
-    window.onbeforeunload = function () {
-        if (!submitFormOkay) {
-            document.getElementById("leavePageWarning").style.display = "block";
-            // Custom message is not supported in many browsers
-            return "You are about to leave this order form. You will lose any information...";
-        }
-    }
-</script>
