@@ -13,18 +13,15 @@ namespace Inquizition.Controllers
     {
         private readonly InquizitionContext _dbContext;
         private readonly IFlashCardManager _flashCardManager;
-        private readonly IPublishManager _publishManager;
-        public CreateController(InquizitionContext dbcontext, IFlashCardManager flashCardManager, IPublishManager publishManager)
+        private readonly IColorThemeManager _colorThemeManager;
+
+        public CreateController(InquizitionContext dbcontext, 
+            IFlashCardManager flashCardManager, 
+            IColorThemeManager colorThemeManager)
         {
             _dbContext = dbcontext;
             _flashCardManager = flashCardManager;
-            _publishManager = publishManager;
-             /* 
-             * This is shit design and flashcard view should dynamically generate new input cards and then send
-             * all forms using [frombody] to a list in the controller. This would eliminate much of the database
-             * access and elimnate need to call this function to remove unassigned cards
-             */
-            _publishManager.RemoveUnpublished();
+            _colorThemeManager = colorThemeManager;
         }
 
         public IActionResult Index()
@@ -93,35 +90,33 @@ namespace Inquizition.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FlashCards(InputFlashCard newCard)
         {
-            // Confirmed publish
-            if (newCard.ConfirmedPublish)
-            {
-
-            }
+            Authenticate();
             ViewData["Profanity"] = false;
             if (!ModelState.IsValid)
             {
                 _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
                 return View(newCard);
             }
-            // Assign random value to users not logged in
-            // Will only execute once and then pass random value each subsequent time from view
+            // Assign the delete flag username to unathenticated users
+            // Will only execute once and then pass delete flag value each subsequent time from view
             if (newCard.Creator == null)
             {
-                Random rnd = new Random();
-                newCard.Creator = rnd.Next(1, 10000000).ToString();
+                newCard.Creator = _flashCardManager.DeleteFlagUsername;
             }
-            if (newCard.FirstCard == true)
+            if (newCard.FirstCard)
             {
-                // Track published
-                AddPublishedTab(newCard.InquizitorName);
+                // Ensure that this aligns with database records (validation against client-side tampering)
+                if (_flashCardManager.TotalEntries(newCard.InquizitorName) > 0)
+                {
+                    return View("ClientTampering");
+                }
                 if (newCard.CardColor == null)
                 {
                     // Set default color
                     newCard.CardColor = "bg-primary";
                 }
                 newCard.FirstCard = false;
-                AddColorTheme(newCard.CardColor, newCard.InquizitorName);
+                _colorThemeManager.AddColorTheme(newCard.CardColor, newCard.InquizitorName, newCard.Creator);
             }
             string violatingAreas = _flashCardManager.CardContainsProfanity(newCard);
             if (violatingAreas != string.Empty)
@@ -134,7 +129,6 @@ namespace Inquizition.Controllers
             // This condition should never execute bc other logic is implemented to restrict creates at max cap
             if (!_flashCardManager.AddFlashCard(newCard))
             {
-                ViewData["MaxCap"] = true;
                 _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
                 return View(newCard);
             }
@@ -143,16 +137,16 @@ namespace Inquizition.Controllers
             return View(newCard);
         }
 
-        public IActionResult PublishSummary(string inquizName, int total, bool loggedIn, string type)
+        public IActionResult PublishSummary(string inquizName, int total, string creator, string type)
         {
             PublishSummary summary = new PublishSummary
             {
                 Title = inquizName,
                 AssessmentType = type,
                 TotalEntries = total,
-                Authenticated = loggedIn
+                Creator = creator
             };
-            if (loggedIn)
+            if (!(creator == _flashCardManager.DeleteFlagUsername))
             {
                 var user = _dbContext.UserOverviewInfo.FirstOrDefault(u => u.Username == User.Identity.Name);
                 _dbContext.UserOverviewInfo.Update(user);
@@ -161,34 +155,12 @@ namespace Inquizition.Controllers
             return View(summary);
         }
 
-        private void AddPublishedTab(string name)
-        {
-            Publish entry = new Publish
-            {
-                InquizitorName = name,
-                Published = false,
-            };
-            _dbContext.Publish.Add(entry);
-            _dbContext.SaveChanges();
-        }
-
-        private void AddColorTheme(string color, string name)
-        {
-            ColorTheme newColorEntry = new ColorTheme
-            {
-                Color = color,
-                InquizitorName = name
-            };
-            _dbContext.ColorTheme.Add(newColorEntry);
-            _dbContext.SaveChanges();
-        }
-
         public void Authenticate()
         {
             // Add viewdata warning if not logged in
             if (!User.Identity.IsAuthenticated)
             {
-                ViewData["creationWontSave"] = "Warning: You are not logged in. Your Inquizitor will not be saved.";
+                ViewData["creationWontSave"] = "Warning: You are not logged in.";
             }
             else
             {
@@ -197,12 +169,6 @@ namespace Inquizition.Controllers
                 if (AuthenicatedUser == null)
                 {
                     ViewData["createNullAuthenticatedUser"] = "Error retrieving account info.\n Suggestion: Clear your cookies.";
-                    return;
-                }
-                if (!AuthenicatedUser.EmailConfirmed)
-                {
-                    ViewData["wontShare"] = "Warning: You have not verified your email.\n" +
-                        "You will be unable to share your Inquizitor with the public or with friends.";
                 }
             }
         }
