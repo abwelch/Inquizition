@@ -42,6 +42,7 @@ namespace Inquizition
 
             services.AddTransient<IFlashCardManager, FlashCardManager>();
             services.AddTransient<IColorThemeManager, ColorThemeManager>();
+            services.AddTransient<IUserInfoManager, UserInfoManager>();
 
             services.Configure<IdentityOptions>(options =>
             {
