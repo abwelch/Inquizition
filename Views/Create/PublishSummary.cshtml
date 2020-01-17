@@ -2,6 +2,7 @@
     ViewData["Title"] = "Publish Summary";
 }
 @model Inquizition.Models.PublishSummary
+@inject IFlashCardManager _flashCardmanager
 
 <section class="text-center">
     <header class="row">
@@ -10,15 +11,15 @@
             <hr />
         </div>
     </header>
-    @if (Model.Authenticated)
+    @if (Model.Creator != _flashCardmanager.DeleteFlagUsername)
     {
         <div class="row">
             <div class="col">
-                <span class="alert alert-success">Inquizitor successfully created! Here are the stats:</span>
+                <span class="text-success">Inquizitor successfully created! Here are the stats:</span>
                 <p>
-                    <b>Inquizitor Title:</b> @Model.Title <br />
-                    <b>Inquizitor Type:</b> @Model.AssessmentType <br />
-                    <b>Total Cards:</b> @Model.TotalEntries <br />
+                    <b style="color:grey">Inquizitor Title:</b> @Model.Title <br />
+                    <b style="color:grey">Inquizitor Type:</b> @Model.AssessmentType <br />
+                    <b style="color:grey">Total Cards:</b> @Model.TotalEntries <br />
                 </p>
             </div>
         </div>
