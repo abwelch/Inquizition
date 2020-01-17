@@ -16,20 +16,35 @@ namespace Inquizition.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly InquizitionContext _dbContext;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IFlashCardManager _flashCardManager;
+        private readonly IColorThemeManager _colorThemeManager;
+
         private UserInfo AuthenticatedUser { get; set; }
 
         public HomeController(ILogger<HomeController> logger,
             InquizitionContext context,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IFlashCardManager flashCardManager,
+            IColorThemeManager colorThemeManager)
         {
             _logger = logger;
             _dbContext = context;
             _userManager = userManager;
+            _flashCardManager = flashCardManager;
+            _colorThemeManager = colorThemeManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            if(User.Identity.IsAuthenticated)
+             /* 
+             * This is shit design and flashcard view should dynamically generate new input card forms and then send
+             * all forms using [frombody] to a list in the controller parameter. This would eliminate much of the database
+             * access and elimnate need to continously call this function to remove unassigned cards
+             */
+            _flashCardManager.ClearUnathenticatedCards();
+            _colorThemeManager.ClearUnathenticatedTheme(_flashCardManager.DeleteFlagUsername);
+
+            if (User.Identity.IsAuthenticated)
             {
                 AuthenticatedUser = _dbContext.UserOverviewInfo.FirstOrDefault(u => u.Username == User.Identity.Name);
                 // User has just registered and is not yet included in UserOverviewInfo table
