@@ -16,6 +16,15 @@ main {
     font-size: 22px;
 }
 
+hr {
+    border-top: 1px solid white;
+}
+
+textarea {
+    resize: none;
+    font-size: 20px;
+}
+
 a:hover {
     text-decoration: underline;
     color: #00a9ff;
@@ -185,14 +194,6 @@ body {
 #change-password:hover {
     color: white;
     border: 1px solid white;
-}
-
-hr {
-    border-top: 1px solid white;
-}
-
-textarea {
-    resize: none;
 }
 
 .footer {
