@@ -41,7 +41,7 @@ namespace Inquizition
             services.AddRazorPages();
 
             services.AddTransient<IFlashCardManager, FlashCardManager>();
-            services.AddTransient<IPublishManager, PublishManager>();
+            services.AddTransient<IColorThemeManager, ColorThemeManager>();
 
             services.Configure<IdentityOptions>(options =>
             {
