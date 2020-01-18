@@ -149,6 +149,7 @@ namespace Inquizition.Controllers
             if (!(creator == _flashCardManager.DeleteFlagUsername))
             {
                 var user = _dbContext.UserOverviewInfo.FirstOrDefault(u => u.Username == User.Identity.Name);
+                user.TotalSets++;
                 _dbContext.UserOverviewInfo.Update(user);
                 _dbContext.SaveChanges();
             }
