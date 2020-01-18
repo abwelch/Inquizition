@@ -1,7 +1,28 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Inquizition.Data;
+using System.Linq;
 
 namespace Inquizition.Models
 {
+    public interface IUserInfoManager
+    {
+        public UserInfo RetrieveUserInfo(string name);
+    }
+
+    public class UserInfoManager : IUserInfoManager
+    {
+        private readonly InquizitionContext _dbContext;
+
+        public UserInfoManager(InquizitionContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public UserInfo RetrieveUserInfo(string name) =>
+            _dbContext.UserOverviewInfo.FirstOrDefault(u => u.Username == name);
+    }
+
+    // Model for database
     public class UserInfo
     {
         public int ID { get; set; }
@@ -16,9 +37,6 @@ namespace Inquizition.Models
         public int TotalBookmarks { get; set; }
         public int ReportedInstances { get; set; }
         public bool Banned { get; set; }
-
-        // Add foreign keys for study set tables 
-
     }
 
     // Utilized to store records of users reporting other users
