@@ -29,7 +29,7 @@ namespace Inquizition
             services.AddDbContext<InquizitionContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<InquizitionContext>();
             // requires
             // using Microsoft.AspNetCore.Identity.UI.Services;
