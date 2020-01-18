@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Manage";
+}
+@model Inquizition.Models.ManageDisplay
+
+<header class="row">
+    <div class="col text-center">
+        <h1 class="display-4">View</h1>
+        <hr />
+    </div>
+</header>
+
+@if (Model.FlashInquizitor.Count > 0)
+{
+    <div class="row text-center">
+        <div class="col">
+            <strong>Card 1</strong>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-10 col-sm-8 col-md-6 flip_container">
+            <div id="1" class="flip m-0 p-0">
+                <div class="flip_front w-100">
+                    <div class="card">
+                        <div class="text-center card-body @Model.Color">
+                            <textarea readonly rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.FlashInquizitor[0].CardBody</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip_back w-100">
+                    <div class="card">
+                        <div class="text-center card-body @Model.Color">
+                            <textarea readonly rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.FlashInquizitor[0].CardAnswer</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <button id="10" class="btn btn-primary" style="font-size:large; display: block;" onclick="FlipCreated('1')">Flip</button>
+    </div>
+    for (int i = 2; i <= Model.FlashInquizitor.Count; i++)
+    {
+        <div class="row text-center">
+            <div class="col">
+                <strong>Card @i</strong>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-10 col-sm-8 col-md-6 flip_container">
+                <div id="@i.ToString()" class="flip m-0 p-0">
+                    <div class="flip_front w-100">
+                        <div class="card">
+                            <div class="text-center card-body @Model.Color">
+                                <textarea readonly rows="6" class="form-control text-center" style="display: none; height: 100%; font-size:x-large;">@Model.FlashInquizitor[i - 1].CardBody</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip_back w-100">
+                        <div class="card">
+                            <div class="text-center card-body @Model.Color">
+                                <textarea readonly rows="6" class="form-control text-center" style="display: none; height: 100%; font-size:x-large;">@Model.FlashInquizitor[i - 1].CardAnswer</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <button id="@{(i * 10).ToString();}" class="btn btn-primary" style="font-size:large; display: none;" onclick="FlipCreated(@i.ToString())">Flip</button>
+        </div>
+        <hr />
+        <!-- Button with correct onclick function call arguments-->
+        if (i != 1)
+        {
+            <div class="row justify-content-center">
+                <button id="next-btn" class="btn btn-primary" style="font-size:large; display: none;" onclick="NextCard(@i.ToString(), @{(i * 10).ToString();}, @{(i + 1).ToString();}, @{((i + 1) * 10).ToString();})">Next</button>
+            </div>
+        }
+        else
+        {
+            <div class="row justify-content-center">
+                <button id="reset-btn" class="btn btn-primary" style="font-size:large; display: none;" onclick="NextCard(@i.ToString(), @{(i * 10).ToString();},'1', '10')">Next</button>
+            </div>
+        }
+
+    }
+}
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+    function NextCard(current, currentButton, next, nextButton) {
+        if (next == "1") {
+            // Hide current card and button
+            document.getElementById(current).style.display = "none";
+            document.getElementById(currentButton).style.display = "none";
+            // Display first card and button
+            document.getElementById("1").style.display = "block";
+            document.getElementById("10").style.display = "block";
+        }
+        else {
+            // Hide current card and button
+            document.getElementById(current).style.display = "none";
+            document.getElementById(currentButton).style.display = "none";
+            // Display next card and button
+            document.getElementById(next).style.display = "block";
+            document.getElementById(nextButton).style.display = "block";
+        }
+    }
+</script>

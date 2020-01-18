@@ -34,9 +34,19 @@ namespace Inquizition.Controllers
             }
             // Retrieve user info
             UserInfo user = _userInfoManager.RetrieveUserInfo(User.Identity.Name);
+            if (user.TotalSets == 0)
+            {
+                ManageIndex emptyModel = new ManageIndex();
+                ViewData["NoInquizitors"] = true;
+                return View(emptyModel);
+            }
+            ViewData["NoInquizitors"] = false;
             ManageIndex viewModel = new ManageIndex
             {
-                FlashCardInquizitorNames = _flashCardManager.RetrieveSetsAssociatedWithUser(user.Username)
+                FlashCardInquizitorNames = _flashCardManager.RetrieveSetsAssociatedWithUser(user.Username),
+                // Reassign when functionality implemented
+                QuizInquizitorNames = new List<string>(),
+                TwoColumnInquizitorNames = new List<string>()
             };
             return View(viewModel);
         }
@@ -45,7 +55,46 @@ namespace Inquizition.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(ManageIndex selection)
         {
+            // Validate chosen inquizitor and redirect
+            if (selection.FlashCardInquizitorNames.Contains(selection.Inquizitor))
+            {
+                switch (selection.Operation)
+                {
+                    case "View":
+                        return View("Display", new { selection.Inquizitor, Type = "flashcard" });
+                }
+            }
+            else if (selection.QuizInquizitorNames.Contains(selection.Inquizitor))
+            {
+                switch (selection.Operation)
+                {
+                    case "View":
+                        return View("Display", new { selection.Inquizitor, Type = "quiz" });
+                }
+            }
+            else if (selection.TwoColumnInquizitorNames.Contains(selection.Inquizitor))
+            {
+                switch (selection.Operation)
+                {
+                    case "View":
+                        return View("Display", new { selection.Inquizitor, Type = "twocolumn" });
+                }
+            }
+            
+            ViewData["SelectionError"] = "Error: the selected model and operation could not be validated.";
+            return View(selection);
+        }
 
+        public IActionResult Display(string Inquizitor, string Type)
+        {
+            ManageDisplay viewModel = new ManageDisplay();
+            switch (Type)
+            {
+                case "flashcard":
+                    viewModel.Color = _colorThemeManager.RetrieveCardColor(Inquizitor);
+                    _flashCardManager.RetrieveAllCards(viewModel.FlashInquizitor, Inquizitor);
+                    return View(viewModel);
+            }
             return View();
         }
     }

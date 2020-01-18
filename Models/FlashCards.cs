@@ -23,7 +23,7 @@ namespace Inquizition.Models
 
         public void ClearUnathenticatedCards();
 
-        public List<string> RetrieveSetsAssociatedWithUser(string username)
+        public List<string> RetrieveSetsAssociatedWithUser(string username);
     }
 
     public class FlashCardManager : IFlashCardManager
@@ -102,14 +102,10 @@ namespace Inquizition.Models
             _dbContext.SaveChanges();
         }
 
-        public List<string> RetrieveSetsAssociatedWithUser(string username)
-        {
-            List<string> setNames = new List<string>();
-            // Create a list of unique inquizitors associated with the user
-            setNames.Append(_dbContext.FlashCards.Where(f => f.Creator == username && !setNames.Contains(f.InquizitorName))
-                .Select(f => f.InquizitorName).ToString());
-            return setNames;
-        }
+        // Create a list of unique inquizitors associated with the user
+        public List<string> RetrieveSetsAssociatedWithUser(string username) =>
+            _dbContext.FlashCards.Where(f => f.Creator == username)
+                .Select(f => f.InquizitorName).Distinct().ToList();
     }
 
     // Table schema class

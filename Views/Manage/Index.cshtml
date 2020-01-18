@@ -1,11 +1,123 @@
-﻿
-<!DOCTYPE html>
+﻿@{
+    ViewData["Title"] = "Manage";
+}
+@model Inquizition.Models.ManageIndex
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-</body>
-</html>
+<header class="row">
+    <div class="col text-center">
+        <h1 class="display-4">Manage</h1>
+        <hr />
+    </div>
+</header>
+@if ((bool)ViewData["NoInquizitors"])
+{
+    <div class="row text-center">
+        <div class="col">
+            <h4>You have not created any Inquizitors!</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <a asp-controller="Create" asp-action="InitialSetup" class="btn btn-primary mb-4" style="font-size:x-large">Create an Inquizitor</a>
+        </div>
+    </div>
+}
+else
+{
+    <article class="row justify-content-Center">
+        <div class="col">
+            <h2>Choose an Inquizitor and operation</h2>
+            <br />
+        </div>
+    </article>
+    <section>
+        <form asp-controller="Manage" asp-action="Index">
+            <!-- Flash Cards -->
+            <article>
+                @if (Model.FlashCardInquizitorNames.Count > 0)
+                {
+                    <div class="row justify-content-start">
+                        <div class="col-10 col-sm-4">
+                            <h4>Flash Card Inquizitors:</h4>
+                            <span asp-validation-for="Inquizitor" class="text-danger"></span>
+                            @foreach (string flashInquiz in Model.FlashCardInquizitorNames)
+                            {
+                                    <label class="radio_container" for="@flashInquiz">
+                                        @flashInquiz
+                                        <input type="radio" id="@flashInquiz" asp-for="Inquizitor" value="@flashInquiz" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                            }
+                        </div>
+                    </div>
+                    <input type="hidden" asp-for="FlashCardInquizitorNames" value="@Model.FlashCardInquizitorNames" />
+                }
+            </article>
+            <!-- Quizzes -->
+            <article>
+                @if (Model.QuizInquizitorNames.Count > 0)
+                {
+                    <div class="row justify-content-start">
+                        <div class="col-10 col-sm-4">
+                            <h4>Quiz Inquizitors:</h4>
+                            <span asp-validation-for="Inquizitor" class="text-danger"></span>
+                            @foreach (string quizInquiz in Model.QuizInquizitorNames)
+                            {
+                                <label class="radio_container" for="@quizInquiz">
+                                    @quizInquiz
+                                    <input type="radio" id="@quizInquiz" asp-for="Inquizitor" value="@quizInquiz" />
+                                    <span class="checkmark"></span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                    <input type="hidden" asp-for="QuizInquizitorNames" value="@Model.QuizInquizitorNames" />
+                }
+            </article>
+            <!-- Two Columns -->
+            <article>
+                @if (Model.TwoColumnInquizitorNames.Count > 0)
+                {
+                    <div class="row justify-content-start">
+                        <div class="col-10 col-sm-4">
+                            <h4>Two-Column List Inquizitors:</h4>
+                            <span asp-validation-for="Inquizitor" class="text-danger"></span>
+                            @foreach (string columnInquiz in Model.TwoColumnInquizitorNames)
+                            {
+                                <label class="radio_container" for="@columnInquiz">
+                                    @columnInquiz
+                                    <input type="radio" id="@columnInquiz" asp-for="Inquizitor" value="@columnInquiz" />
+                                    <span class="checkmark"></span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                    <input type="hidden" asp-for="TwoColumnInquizitorNames" value="@Model.TwoColumnInquizitorNames" />
+                }
+            </article>
+            <!-- Operation -->
+            <article class="row justify-content-start">
+                <div class="col-5 col-sm-2">
+                    <h4>Operation:</h4>
+                    <span asp-validation-for="Operation" class="text-danger"></span>
+                    <label class="radio_container" for="View">
+                        View
+                        <input type="radio" id="View" asp-for="Operation" value="View" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio_container" for="Edit">
+                        Edit
+                        <input type="radio" id="Edit" asp-for="Operation" value="Edit" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio_container" for="Delete">
+                        Edit
+                        <input type="radio" id="Delete" asp-for="Operation" value="Delete" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </article>
+            <button type="submit" class="btn btn-primary">Proceed</button>
+        </form>
+    </section>
+}
