@@ -11,6 +11,8 @@ namespace Inquizition.Models
         public void AddColorTheme(string color, string name, string creator);
 
         public void ClearUnathenticatedTheme(string flagUsername);
+
+        public string RetrieveCardColor(string inquziName);
     }
 
     public class ColorThemeManager : IColorThemeManager
@@ -20,6 +22,14 @@ namespace Inquizition.Models
         public ColorThemeManager(InquizitionContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public string RetrieveCardColor(string inquziName)
+        {
+            var entry = _dbContext.ColorTheme.FirstOrDefault(c => c.InquizitorName == inquziName);
+            if (entry == null)
+                return string.Empty;
+            return entry.Color;
         }
 
         public void AddColorTheme(string color, string name, string creator)
