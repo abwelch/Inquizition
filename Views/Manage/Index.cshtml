@@ -50,7 +50,7 @@ else
                             }
                         </div>
                     </div>
-                    <input type="hidden" asp-for="FlashCardInquizitorNames" value="@Model.FlashCardInquizitorNames" />
+                    <input type="hidden" asp-for="Type" value="flashcard" />
                 }
             </article>
             <!-- Quizzes -->
@@ -71,7 +71,7 @@ else
                             }
                         </div>
                     </div>
-                    <input type="hidden" asp-for="QuizInquizitorNames" value="@Model.QuizInquizitorNames" />
+                    <input type="hidden" asp-for="Type" value="quiz" />
                 }
             </article>
             <!-- Two Columns -->
@@ -92,7 +92,7 @@ else
                             }
                         </div>
                     </div>
-                    <input type="hidden" asp-for="TwoColumnInquizitorNames" value="@Model.TwoColumnInquizitorNames" />
+                    <input type="hidden" asp-for="Type" value="twocolumn" />
                 }
             </article>
             <!-- Operation -->
@@ -102,7 +102,7 @@ else
                     <span asp-validation-for="Operation" class="text-danger"></span>
                     <label class="radio_container" for="View">
                         View
-                        <input type="radio" id="View" asp-for="Operation" value="View" />
+                        <input type="radio" checked="checked" id="View" asp-for="Operation" value="View" />
                         <span class="checkmark"></span>
                     </label>
                     <label class="radio_container" for="Edit">
