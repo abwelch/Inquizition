@@ -55,21 +55,26 @@ namespace Inquizition.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(ManageIndex selection)
         {
-            // Validate chosen inquizitor and redirect
-            if (selection.FlashCardInquizitorNames.Contains(selection.Inquizitor))
+            if (selection.Type == "flashcard")
             {
-                switch (selection.Operation)
+                // Verify that inquiz exists (client-tampering check)
+                selection.FlashCardInquizitorNames = _flashCardManager.RetrieveSetsAssociatedWithUser(User.Identity.Name);
+                if (selection.FlashCardInquizitorNames.Contains(selection.Inquizitor))
                 {
-                    case "View":
-                        return View("Display", new { selection.Inquizitor, Type = "flashcard" });
+                    switch (selection.Operation)
+                    {
+                        case "View":
+                            return RedirectToAction("Display", new { selection.Inquizitor, Type = "flashcard" });
+                    }
                 }
             }
+            /*
             else if (selection.QuizInquizitorNames.Contains(selection.Inquizitor))
             {
                 switch (selection.Operation)
                 {
                     case "View":
-                        return View("Display", new { selection.Inquizitor, Type = "quiz" });
+                        return RedirectToAction("Display", new { selection.Inquizitor, Type = "quiz" });
                 }
             }
             else if (selection.TwoColumnInquizitorNames.Contains(selection.Inquizitor))
@@ -80,7 +85,7 @@ namespace Inquizition.Controllers
                         return View("Display", new { selection.Inquizitor, Type = "twocolumn" });
                 }
             }
-            
+            */
             ViewData["SelectionError"] = "Error: the selected model and operation could not be validated.";
             return View(selection);
         }
@@ -92,7 +97,7 @@ namespace Inquizition.Controllers
             {
                 case "flashcard":
                     viewModel.Color = _colorThemeManager.RetrieveCardColor(Inquizitor);
-                    _flashCardManager.RetrieveAllCards(viewModel.FlashInquizitor, Inquizitor);
+                    viewModel.FlashInquizitor = _flashCardManager.RetrieveAllCards(Inquizitor);
                     return View(viewModel);
             }
             return View();
