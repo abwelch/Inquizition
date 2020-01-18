@@ -94,7 +94,7 @@ namespace Inquizition.Controllers
             ViewData["Profanity"] = false;
             if (!ModelState.IsValid)
             {
-                _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
+                newCard.Inquizitor = _flashCardManager.RetrieveAllCards(newCard.InquizitorName);
                 return View(newCard);
             }
             // Assign the delete flag username to unathenticated users
@@ -122,18 +122,18 @@ namespace Inquizition.Controllers
             if (violatingAreas != string.Empty)
             {
                 ViewData["Profanity"] = true;
-                _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
+                newCard.Inquizitor = _flashCardManager.RetrieveAllCards(newCard.InquizitorName);
                 return View(newCard);
             }
             // Implicit upcast polymorphism in method parameter
             // This condition should never execute bc other logic is implemented to restrict creates at max cap
             if (!_flashCardManager.AddFlashCard(newCard))
             {
-                _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
+                newCard.Inquizitor = _flashCardManager.RetrieveAllCards(newCard.InquizitorName);
                 return View(newCard);
             }
             // Generate list of card entries for this inquizitor
-            _flashCardManager.RetrieveAllCards(newCard.Inquizitor, newCard.InquizitorName);
+            newCard.Inquizitor = _flashCardManager.RetrieveAllCards(newCard.InquizitorName);
             return View(newCard);
         }
 

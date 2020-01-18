@@ -19,7 +19,7 @@ namespace Inquizition.Models
 
         public int TotalEntries(string inquizName);
 
-        public void RetrieveAllCards(List<FlashCardEntry> Inquizitor, string inquizName);
+        public List<FlashCardEntry> RetrieveAllCards(string inquizName);
 
         public void ClearUnathenticatedCards();
 
@@ -75,8 +75,9 @@ namespace Inquizition.Models
             return violatingSections;
         }
 
-        public void RetrieveAllCards(List<FlashCardEntry> Inquizitor, string inquizName)
+        public List<FlashCardEntry> RetrieveAllCards(string inquizName)
         {
+            List<FlashCardEntry> Inquizitor = new List<FlashCardEntry>();
             // Ensure empty before retrieving all elements in inquizitor
             if (Inquizitor.Count != 0)
             {
@@ -89,6 +90,7 @@ namespace Inquizition.Models
                     Inquizitor.Add(f);
                 }
             }
+            return Inquizitor;
         }
 
         public void ClearUnathenticatedCards()
