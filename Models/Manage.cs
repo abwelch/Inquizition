@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Inquizition.Models
@@ -14,6 +13,8 @@ namespace Inquizition.Models
 
         [Required]
         public string Inquizitor { get; set; }
+
+        public string Type { get; set; }
 
         [Required]
         public string Operation { get; set; }
