@@ -113,15 +113,13 @@ namespace Inquizition.Models
             _dbContext.FlashCards.Where(f => f.Creator == username)
                 .Select(f => f.InquizitorName).Distinct().ToList();
 
-        public List<FlashCardEntry> RetrievePublicInquizitorSummaries()
-        {
-            List<FlashCardEntry> summaries = _dbContext.FlashCards
-                .AsEnumerable()
-                .GroupBy(f => f.InquizitorName)
-                .Where(f => f.FirstOrDefault().IsPrivate == false)
-                .Select(x => x.FirstOrDefault()).ToList();
-            return summaries;
-        }
+        public List<FlashCardEntry> RetrievePublicInquizitorSummaries() =>
+            _dbContext.FlashCards
+            .AsEnumerable()
+            .GroupBy(f => f.InquizitorName)
+            .Where(f => f.FirstOrDefault().IsPrivate == false)
+            .Select(x => x.FirstOrDefault()).ToList();
+
         public List<List<FlashCardEntry>> RetrieveAllInquizitors()
         {
             List<List<FlashCardEntry>> mostRecents = new List<List<FlashCardEntry>>();
@@ -138,7 +136,7 @@ namespace Inquizition.Models
             }
             for (int i = mostRecents.Count; i > 10; i--)
             {
-                mostRecents.RemoveAt(i-1);
+                mostRecents.RemoveAt(i - 1);
             }
             return mostRecents;
         }
