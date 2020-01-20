@@ -1,74 +1,77 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model Inquizition.Models.UserInfo
+@inject IFlashCardManager _flashCardManager
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-    <section class="text-center lead introduction">
-        @if (User.Identity.IsAuthenticated)
+<section class="text-center lead introduction">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <!-- Should never execute -->
+        @if (Model == null)
         {
-            <!-- Should never execute -->
-            @if (Model == null)
-            {
-                <header class="row">
-                    <div class="col">
-                        <span class="alert alert-danger">@ViewData["homeNullAuthenticatedUser"]</span>
-                    </div>
-                </header>
-            }
-            else
-            {
-                <!-- Logged in content -->
-                <header class="row">
-                    <div class="col">
-                        <h2 class="display-4">Welcome back - <span style="color: lightgreen;">@User.Identity.Name</span>!</h2>
-                        @if (!Model.EmailConfirmed)
-                        {
-                            <span>
-                                Verify your email to share content with friends:
-                                <a asp-area="Identity" asp-page="/Account/Manage/Email">verify</a>
-                            </span>
-                        }
-                        @if (!Model.IntroCompleted)
-                        {
-                            <aside class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></aside>
-
-                        }
-                        <hr />
-                    </div>
-                </header>
-                @if(Model.TotalSets > 0)
-                {
-
-                }
-                <!--
-            <article>
-                <header class="row">
-                    <div class="col">
-                        <h4>New In Public</h4>
-                    </div>
-                </header>
-                <div class="row">
-                    <div class="col">
-                        <p class="lead">
-                            Here's the latest contribution to the public section.
-                        </p>
-                    </div>
+            <header class="row">
+                <div class="col">
+                    <span class="alert alert-danger">@ViewData["homeNullAuthenticatedUser"]</span>
                 </div>
-            </article>
-            -->
-            }
+            </header>
         }
         else
         {
-            <!-- Content for not logged in -->
+            <!-- Logged in content -->
             <header class="row">
                 <div class="col">
-                    <h2 class="display-4">Welcome to Inquizition</h2>
-                    <aside class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></aside>
+                    <h2 class="display-4">Welcome back - <span style="color: lightgreen;">@User.Identity.Name</span>!</h2>
+                    @if (!Model.EmailConfirmed)
+                    {
+                        <span>
+                            Verify your email to share content with friends:
+                            <a asp-area="Identity" asp-page="/Account/Manage/Email">verify</a>
+                        </span>
+                    }
+                    @if (!Model.IntroCompleted)
+                    {
+                        <aside class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></aside>
+
+                    }
                     <hr />
                 </div>
             </header>
         }
-    </section>
+    }
+    else
+    {
+        <!-- Content for not logged in -->
+        <header class="row">
+            <div class="col">
+                <h2 class="display-4">Welcome to Inquizition</h2>
+                <aside class="lead">New to Inquizition? - <a asp-controller="Help" asp-action="Index">View the Introduction</a></aside>
+                <hr />
+            </div>
+        </header>
+    }
+    <article>
+        <header class="row">
+            <div class="col">
+                <h3>New In Public Section</h3>
+            </div>
+        </header>
+        @foreach (var i in _flashCardManager.RetrievePublicInquizitorSummaries())
+        {
+            <div class="row">
+                <div class="col">
+                    <span class="lead" style="font-size:x-large;">"@i.InquizitorName" by: @i.Creator</span>
+                    <a asp-controller="Home" asp-action="PublicViewer"
+                       asp-route-Inquizitor="@i.InquizitorName"
+                       asp-route-Creator="@i.Creator"
+                       asp-route-Type="flashcard"
+                       style="font-size:x-large;"><br />View</a>
+                    <br />
+                </div>
+            </div>
+        }
+
+    </article>
+</section>
