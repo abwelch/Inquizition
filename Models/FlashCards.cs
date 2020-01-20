@@ -24,6 +24,10 @@ namespace Inquizition.Models
         public void ClearUnathenticatedCards();
 
         public List<string> RetrieveSetsAssociatedWithUser(string username);
+
+        public List<FlashCardEntry> RetrievePublicInquizitorSummaries();
+
+        public List<List<FlashCardEntry>> RetrieveAllInquizitors();
     }
 
     public class FlashCardManager : IFlashCardManager
@@ -108,6 +112,36 @@ namespace Inquizition.Models
         public List<string> RetrieveSetsAssociatedWithUser(string username) =>
             _dbContext.FlashCards.Where(f => f.Creator == username)
                 .Select(f => f.InquizitorName).Distinct().ToList();
+
+        public List<FlashCardEntry> RetrievePublicInquizitorSummaries()
+        {
+            List<FlashCardEntry> summaries = _dbContext.FlashCards
+                .AsEnumerable()
+                .GroupBy(f => f.InquizitorName)
+                .Where(f => f.FirstOrDefault().IsPrivate == false)
+                .Select(x => x.FirstOrDefault()).ToList();
+            return summaries;
+        }
+        public List<List<FlashCardEntry>> RetrieveAllInquizitors()
+        {
+            List<List<FlashCardEntry>> mostRecents = new List<List<FlashCardEntry>>();
+            mostRecents.Append(_dbContext.FlashCards.GroupBy(f => f.InquizitorName)
+                .Where(x => x.Count() > 1)
+                .SelectMany(g => g).ToList());
+            // This should be incorporated into the original query somehow
+            foreach (var i in mostRecents)
+            {
+                if (i[0].IsPrivate)
+                {
+                    mostRecents.Remove(i);
+                }
+            }
+            for (int i = mostRecents.Count; i > 10; i--)
+            {
+                mostRecents.RemoveAt(i-1);
+            }
+            return mostRecents;
+        }
     }
 
     // Table schema class
