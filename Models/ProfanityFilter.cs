@@ -25,7 +25,7 @@ namespace Inquizition.Models
             {
                 "fuck",
                 "shit",
-                "ass",
+                "asshole",
                 "cunt",
                 "slut",
                 "whore",
