@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Public Viewer";
+}
+@model Inquizition.Models.PublicDisplay
+
+<section>
+    <header class="row">
+        <div class="col text-center">
+            <h1 class="display-4">View</h1>
+
+            <h3 class="display-4" style="font-size:xx-large;">@Model.Title - Created by: @Model.Creator</h3>
+            <hr />
+        </div>
+    </header>
+
+    @if (Model.FlashInquizitor.Count > 0)
+    {
+        <div class="row justify-content-center">
+            <div class="col-10 col-sm-8 col-md-6 flip_container">
+                <div id="whole-card" class="flip m-0 p-0">
+                    <div class="flip_front w-100">
+                        <div class="card">
+                            <div class="text-center card-body @Model.Color">
+                                <textarea readonly id="cardBody" rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.FlashInquizitor[0].CardBody</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip_back w-100">
+                        <div class="card">
+                            <div class="text-center card-body @Model.Color">
+                                <textarea readonly id="cardAnswer" rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.FlashInquizitor[0].CardAnswer</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <button class="btn btn-primary p-4 mt-5" style="font-size:large;" onclick="FlipCurrent()">Flip</button>
+        </div>
+        <div class="row justify-content-end">
+            <button class="btn btn-primary p-3 mr-3" style="font-size:large;" onclick="NextCard()">Next</button>
+        </div>
+    }
+</section>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+    var cardBodies = [];
+    var cardAnswers = [];
+    window.onload = function () {
+        PopulateArrays()
+    };
+
+    function PopulateArrays() {
+        @for (int i = 0; i < Model.FlashInquizitor.Count; i++)
+        {
+            @:cardBodies.push("@Model.FlashInquizitor[i].CardBody");
+            @:cardAnswers.push("@Model.FlashInquizitor[i].CardAnswer");
+        }
+    }
+
+    function NextCard() {
+        var currentIndex = cardBodies.indexOf(document.getElementById("cardBody").value);
+        if ((currentIndex + 1) == @Model.FlashInquizitor.Count) {
+            document.getElementById("cardBody").value = cardBodies[0];
+            document.getElementById("cardAnswer").value = cardAnswers[0];
+        }
+        else {
+            document.getElementById("cardBody").value = cardBodies[(currentIndex+1)];
+            document.getElementById("cardAnswer").value = cardAnswers[(currentIndex+1)];
+        }
+    }
+</script>
