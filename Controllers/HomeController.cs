@@ -78,6 +78,21 @@ namespace Inquizition.Controllers
             return View();
         }
 
+        public IActionResult PublicViewer(string Inquizitor, string Creator, string Type)
+        {
+            PublicDisplay viewModel = new PublicDisplay();
+            switch (Type)
+            {
+                case "flashcard":
+                    viewModel.Color = _colorThemeManager.RetrieveCardColor(Inquizitor);
+                    viewModel.FlashInquizitor = _flashCardManager.RetrieveAllCards(Inquizitor);
+                    viewModel.Creator = Creator;
+                    viewModel.Title = Inquizitor;
+                    return View(viewModel);
+            }
+            return View(viewModel);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
