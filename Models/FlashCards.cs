@@ -31,6 +31,8 @@ namespace Inquizition.Models
 
         public void DeleteInquizitor(string inquizName);
 
+        public FlashCardEntry RetrieveCard(string inquizName, int cardNumber);
+
         public bool UpdateCard(string inquizitor, int cardNumber, string updatedBody, string updatedAnswer);
 
         public bool DeleteCard(string inquizitor, int cardNumber);
@@ -136,19 +138,23 @@ namespace Inquizition.Models
             _dbContext.SaveChanges();
         }
 
+        public FlashCardEntry RetrieveCard(string inquizName, int cardNumber) =>
+            _dbContext.FlashCards.SingleOrDefault(f => f.InquizitorName == inquizName && f.CardNumber == cardNumber);
+
         public bool UpdateCard(string inquizName, int cardNumber, string updatedBody, string updatedAnswer)
         {
-            var toUpdate = _dbContext.FlashCards.Where(f => f.CardNumber == cardNumber).FirstOrDefault();
+            var toUpdate = _dbContext.FlashCards
+                .Where(f => f.CardNumber == cardNumber && f.InquizitorName == inquizName).FirstOrDefault();
             if (toUpdate == null)
             {
                 return false;
             }
-            if (updatedBody != string.Empty)
+            if (updatedBody != null)
             {
                 toUpdate.CardBody = updatedBody;
                 _dbContext.FlashCards.Update(toUpdate);
             }
-            if (updatedAnswer != string.Empty)
+            if (updatedAnswer != null)
             {
                 toUpdate.CardAnswer = updatedAnswer;
                 _dbContext.FlashCards.Update(toUpdate);
