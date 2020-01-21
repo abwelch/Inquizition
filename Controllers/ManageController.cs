@@ -65,6 +65,10 @@ namespace Inquizition.Controllers
                     {
                         case "View":
                             return RedirectToAction("Display", new { selection.Inquizitor, Type = "flashcard" });
+                        case "Edit":
+                            return RedirectToAction("Edit", new { selection.Inquizitor, Type = "flashcard" });
+                        case "Delete":
+                            return RedirectToAction("Delete", new { selection.Inquizitor, Type = "flashcard" });
                     }
                 }
             }
@@ -92,6 +96,11 @@ namespace Inquizition.Controllers
 
         public IActionResult Display(string Inquizitor, string Type)
         {
+            // Unathenticated users cannot access this page
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ManageDisplay viewModel = new ManageDisplay();
             switch (Type)
             {
@@ -101,6 +110,57 @@ namespace Inquizition.Controllers
                     return View(viewModel);
             }
             return View();
+        }
+
+        public IActionResult Edit(string Inquizitor, string Type)
+        {
+            // Unathenticated users cannot access this page
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ManageDisplay viewModel = new ManageDisplay();
+            switch (Type)
+            {
+                case "flashcard":
+                    viewModel.Color = _colorThemeManager.RetrieveCardColor(Inquizitor);
+                    viewModel.FlashInquizitor = _flashCardManager.RetrieveAllCards(Inquizitor);
+                    return View(viewModel);
+            }
+            return View();
+        }
+
+        public IActionResult Delete(string Inquizitor, string Type)
+        {
+            // Unathenticated users cannot access this page
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            PublishSummary deletionSummary = new PublishSummary
+            {
+                Title = Inquizitor,
+                AssessmentType = Type,
+                TotalEntries = _flashCardManager.TotalEntries(Inquizitor)
+            };
+            return View(deletionSummary);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(string Title)
+        {
+            // Ensure no client side tampering
+            if (_flashCardManager.RetrieveSetsAssociatedWithUser(User.Identity.Name).Contains(Title))
+            {
+                _flashCardManager.DeleteInquizitor(Title);
+                ViewData["inquiz"] = Title;
+                return View("DeleteSuccess");
+            }
+            else
+            {
+                return RedirectToAction("Create", "ClientTampering");
+            }
         }
     }
 }
