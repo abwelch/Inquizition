@@ -39,7 +39,6 @@ namespace Inquizition.Models
                 "anus",
                 "anal",
                 "penis",
-                "vagina",
                 "clit",
                 "cock",
                 "dildo",
