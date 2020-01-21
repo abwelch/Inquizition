@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Edit Overview";
+}
+@model Inquizition.Models.PublicDisplay
+
+    <section>
+        <header class="row">
+            <div class="col text-center">
+                <h1 class="display-4">Edit - "<span style="color:lightgreen">@Model.Title</span>"</h1>
+                <hr />
+            </div>
+        </header>
+        <!-- Print all previous cards created for this Inquizitor -->
+        @for (int i = 1; i <= Model.FlashInquizitor.Count; i++)
+        {
+            <div class="row text-center">
+                <div class="col">
+                    <strong>Card @i</strong>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-10 col-sm-8 col-md-6 flip_container">
+                    <div id="@i.ToString()" class="flip m-0 p-0">
+                        <div class="flip_front w-100">
+                            <div class="card">
+                                <div class="text-center card-body @Model.Color">
+                                    <textarea readonly rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.FlashInquizitor[i - 1].CardBody</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flip_back w-100">
+                            <div class="card">
+                                <div class="text-center card-body @Model.Color">
+                                    <textarea readonly rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.FlashInquizitor[i - 1].CardAnswer</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-end">
+                <button class="btn btn-primary mr-3 mt-4" style="font-size:large;" onclick="FlipCreated(@i.ToString())">Flip</button>
+            </div>
+            <!--
+        <div class="row justify-content-center">
+            <a asp-controller="Manage" asp-action="AddSpecific"
+               asp-route-inquizitor="@Model.Title" asp-route-cardNumber="@i"
+               class="btn btn-success mb-5">
+                Insert new after current
+            </a>
+        </div>
+        -->
+            <div class="row justify-content-center">
+                <a asp-controller="Manage" asp-action="EditSpecific"
+                   asp-route-inquizitor="@Model.Title" asp-route-cardNumber="@i"
+                   class="btn btn-warning mb-5">
+                    Edit Current
+                </a>
+            </div>
+            <!--
+        <div class="row justify-content-center">
+            <a asp-controller="Manage" asp-action="DeleteSpecific"
+               asp-route-inquizitor="@Model.Title" asp-route-cardNumber="@i"
+               class="btn btn-danger mb-5">
+                Delete Current
+            </a>
+        </div>
+        <hr />
+        -->
+        }
+    </section>
+
+<script src="~/js/site.js" asp-append-version="true"></script>

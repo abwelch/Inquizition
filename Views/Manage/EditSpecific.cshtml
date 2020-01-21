@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Edit Card";
+}
+@model Inquizition.Models.FlashCardEntry
+
+    <section>
+        <header class="row">
+            <div class="col text-center">
+                <h1 class="display-4">Edit Current Card</h1>
+                <hr />
+            </div>
+        </header>
+        <div class="row justify-content-center">
+            <div class="col-10 col-sm-8 col-md-6 flip_container mb-3">
+                <form asp-controller="Manage" asp-action="EditSpecific" id="cardForm">
+                    <div class="text-center">
+                        <span asp-validation-for="CardBody" class="text-danger"></span>
+                        <br />
+                        <span asp-validation-for="CardAnswer" class="text-danger"></span>
+                    </div>
+                    <div id="whole-card" class="flip m-0 p-0">
+                        <div class="flip_front w-100">
+                            <div class="card">
+                                <div id="body" class="card-body">
+                                    <textarea rows="6" id="front-input" class="form-control text-center" asp-for="CardBody"
+                                              style="display: block; height: 100%; font-size:x-large;">@Model.CardBody</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flip_back w-100">
+                            <div class="card">
+                                <div id="answer" class="card-body">
+                                    <textarea rows="6" id="back-input" class="form-control text-center" asp-for="CardAnswer"
+                                              style="display: block; height: 100%; font-size:x-large;">@Model.CardBody</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" asp-for="CardNumber" value="@Model.CardNumber" />
+                    <input type="hidden" asp-for="InquizitorName" value="@Model.InquizitorName" />
+                </form>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <button type="submit" form="cardForm" class="btn btn-success p-2 mt-5" style="font-size:x-large;">Update</button>
+        </div>
+        <div class="row justify-content-end">
+            <button class="btn btn-primary mt-2 p-2" style="font-size:x-large;" onclick="FlipCurrent()">Flip</button>
+        </div>
+    </section>
