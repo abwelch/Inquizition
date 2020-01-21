@@ -119,14 +119,48 @@ namespace Inquizition.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            ManageDisplay viewModel = new ManageDisplay();
+            PublicDisplay viewModel = new PublicDisplay();
             switch (Type)
             {
                 case "flashcard":
+                    viewModel.Title = Inquizitor;
                     viewModel.Color = _colorThemeManager.RetrieveCardColor(Inquizitor);
                     viewModel.FlashInquizitor = _flashCardManager.RetrieveAllCards(Inquizitor);
                     return View(viewModel);
             }
+            return View();
+        }
+
+        public IActionResult EditSpecific(string inquizitor, int cardNumber)
+        {
+            FlashCardEntry editCard = _flashCardManager.RetrieveCard(inquizitor, cardNumber);
+            return View(editCard);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditSpecific(FlashCardEntry updatedCard)
+        {
+            if (_flashCardManager.CardContainsProfanity(updatedCard) != string.Empty)
+            {
+                return View();
+            }
+            _flashCardManager.UpdateCard(updatedCard.InquizitorName, updatedCard.CardNumber,
+                updatedCard.CardBody, updatedCard.CardAnswer);
+            InputFlashCard viewModel = new InputFlashCard
+            {
+                CardBody = updatedCard.CardBody,
+                CardAnswer = updatedCard.CardAnswer,
+                CardColor = _colorThemeManager.RetrieveCardColor(updatedCard.InquizitorName),
+                CardNumber = updatedCard.CardNumber,
+                InquizitorName = updatedCard.InquizitorName
+            };
+            return View("EditSuccess", viewModel);
+        }
+
+        public IActionResult DeleteSpecific(string inquizitor, int cardNumber)
+        {
+
             return View();
         }
 
