@@ -30,6 +30,10 @@ namespace Inquizition.Models
         public List<List<FlashCardEntry>> RetrieveAllInquizitors();
 
         public void DeleteInquizitor(string inquizName);
+
+        public bool UpdateCard(string inquizitor, int cardNumber, string updatedBody, string updatedAnswer);
+
+        public bool DeleteCard(string inquizitor, int cardNumber);
     }
 
     public class FlashCardManager : IFlashCardManager
@@ -130,6 +134,39 @@ namespace Inquizition.Models
                 _dbContext.FlashCards.Remove(card);
             }
             _dbContext.SaveChanges();
+        }
+
+        public bool UpdateCard(string inquizName, int cardNumber, string updatedBody, string updatedAnswer)
+        {
+            var toUpdate = _dbContext.FlashCards.Where(f => f.CardNumber == cardNumber).FirstOrDefault();
+            if (toUpdate == null)
+            {
+                return false;
+            }
+            if (updatedBody != string.Empty)
+            {
+                toUpdate.CardBody = updatedBody;
+                _dbContext.FlashCards.Update(toUpdate);
+            }
+            if (updatedAnswer != string.Empty)
+            {
+                toUpdate.CardAnswer = updatedAnswer;
+                _dbContext.FlashCards.Update(toUpdate);
+            }
+            _dbContext.SaveChanges();
+            return true;
+        }
+
+        public bool DeleteCard(string inquizName, int cardNumber)
+        {
+            var toDelete = _dbContext.FlashCards.Where(f => f.CardNumber == cardNumber).FirstOrDefault();
+            if (toDelete == null)
+            {
+                return false;
+            }
+            _dbContext.FlashCards.Remove(toDelete);
+            _dbContext.SaveChanges();
+            return true;
         }
 
 
