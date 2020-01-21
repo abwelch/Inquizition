@@ -28,6 +28,8 @@ namespace Inquizition.Models
         public List<FlashCardEntry> RetrievePublicInquizitorSummaries();
 
         public List<List<FlashCardEntry>> RetrieveAllInquizitors();
+
+        public void DeleteInquizitor(string inquizName);
     }
 
     public class FlashCardManager : IFlashCardManager
@@ -119,6 +121,17 @@ namespace Inquizition.Models
             .GroupBy(f => f.InquizitorName)
             .Where(f => f.FirstOrDefault().IsPrivate == false)
             .Select(x => x.FirstOrDefault()).ToList();
+
+        public void DeleteInquizitor(string inquizName)
+        {
+            var toDeleteCards = _dbContext.FlashCards.Where(f => f.InquizitorName == inquizName);
+            foreach (var card in toDeleteCards)
+            {
+                _dbContext.FlashCards.Remove(card);
+            }
+            _dbContext.SaveChanges();
+        }
+
 
         public List<List<FlashCardEntry>> RetrieveAllInquizitors()
         {
