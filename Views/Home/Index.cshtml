@@ -55,23 +55,21 @@
     <article>
         <header class="row">
             <div class="col">
-                <h3>New In Public Section</h3>
+                <h3 style="color:lightgreen;">New in Public</h3>
             </div>
         </header>
         @foreach (var i in _flashCardManager.RetrievePublicInquizitorSummaries())
         {
             <div class="row">
                 <div class="col">
-                    <span class="lead" style="font-size:x-large;">"@i.InquizitorName" by: @i.Creator</span>
                     <a asp-controller="Home" asp-action="PublicViewer"
                        asp-route-Inquizitor="@i.InquizitorName"
                        asp-route-Creator="@i.Creator"
                        asp-route-Type="flashcard"
-                       style="font-size:x-large;"><br />View</a>
-                    <br />
+                       style="font-size:x-large;">@i.InquizitorName</a>
+                    <span class="lead" style="font-size:x-large;"> by: @i.Creator</span>
                 </div>
             </div>
         }
-
     </article>
 </section>
