@@ -9,16 +9,9 @@ namespace Inquizition.Areas.Identity.Pages.Account
 {
     public class EmailSender : IEmailSender
     {
-        public EmailSender(IOptions<EmailKey> optionsAccessor)
-        {
-            Options = optionsAccessor.Value;
-        }
-
-        public EmailKey Options { get; } //set only via Secret Manager
-
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            return Execute(Options.SendGridKey, subject, message, email);
+            return Execute(System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY"), subject, message, email);
         }
 
         public Task Execute(string apiKey, string subject, string message, string email)
@@ -40,4 +33,4 @@ namespace Inquizition.Areas.Identity.Pages.Account
             return client.SendEmailAsync(msg);
         }
     }
-}
+} 
