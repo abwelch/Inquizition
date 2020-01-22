@@ -27,5 +27,6 @@ namespace Inquizition.Data
         public DbSet<UserInfo> UserOverviewInfo { get; set; }
         public DbSet<FlashCardEntry> FlashCards { get; set; }
         public DbSet<ColorTheme> ColorTheme { get; set; }
+        public DbSet<ReportBug> BugReports { get; set; }
     }
 }
