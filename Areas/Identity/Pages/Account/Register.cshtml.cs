@@ -77,8 +77,13 @@ namespace Inquizition.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(bool? saveInquiz, string inquizName, string returnUrl = null)
         {
+            // Package values to send to view and send back on successful account creation
+            if (saveInquiz != null && inquizName != null)
+            {
+
+            }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
