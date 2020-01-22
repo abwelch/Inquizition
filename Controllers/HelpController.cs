@@ -39,6 +39,32 @@ namespace Inquizition.Controllers
             return View();
         }
 
+        public IActionResult Reportbug()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ReportBug(ReportBug submission)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            if (User.Identity.IsAuthenticated)
+            {
+                submission.User = User.Identity.Name;
+            }
+            else
+            {
+                submission.User = "Unknown";
+            }
+            _dbContext.BugReports.Add(submission);
+            _dbContext.SaveChanges();
+            return View("SubmissionSuccess");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
