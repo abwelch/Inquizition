@@ -41,15 +41,13 @@
         <div class="row justify-content-end">
             <button class="btn btn-primary mr-3 mt-4" style="font-size:large;" onclick="FlipCreated(@i.ToString())">Flip</button>
         </div>
-        <!--
         <div class="row justify-content-center">
             <a asp-controller="Manage" asp-action="AddSpecific"
                asp-route-inquizitor="@Model.Title" asp-route-cardNumber="@i"
                class="btn btn-success mb-5">
-                Insert new after current
+                Insert New
             </a>
         </div>
-        -->
         <div class="row justify-content-center">
             <a asp-controller="Manage" asp-action="EditSpecific"
                asp-route-inquizitor="@Model.Title" asp-route-cardNumber="@i"
@@ -57,7 +55,7 @@
                 Edit Current
             </a>
         </div>
-        <!--
+
         <div class="row justify-content-center">
             <a asp-controller="Manage" asp-action="DeleteSpecific"
                asp-route-inquizitor="@Model.Title" asp-route-cardNumber="@i"
@@ -65,8 +63,6 @@
                 Delete Current
             </a>
         </div>
-        <hr />
-        -->
         <hr />
     }
 </section>
