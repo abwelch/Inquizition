@@ -160,8 +160,8 @@ namespace Inquizition.Controllers
 
         public IActionResult DeleteSpecific(string inquizitor, int cardNumber)
         {
-
-            return View();
+            _flashCardManager.DeleteCard(inquizitor, cardNumber);
+            return RedirectToAction("Edit", new { Inquizitor = inquizitor, Type = "flashcard"});
         }
 
         public IActionResult Delete(string Inquizitor, string Type)
