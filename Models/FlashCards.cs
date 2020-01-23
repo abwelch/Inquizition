@@ -165,7 +165,8 @@ namespace Inquizition.Models
 
         public bool DeleteCard(string inquizName, int cardNumber)
         {
-            var toDelete = _dbContext.FlashCards.Where(f => f.CardNumber == cardNumber).FirstOrDefault();
+            var toDelete = _dbContext.FlashCards
+                .Where(f => f.CardNumber == cardNumber && f.InquizitorName == inquizName).FirstOrDefault();
             if (toDelete == null)
             {
                 return false;
