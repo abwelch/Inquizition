@@ -172,6 +172,17 @@ namespace Inquizition.Models
                 return false;
             }
             _dbContext.FlashCards.Remove(toDelete);
+            // Reassign card numbers of affected after delete
+            var affected = _dbContext.FlashCards.Where(f => f.CardNumber > cardNumber && f.InquizitorName == inquizName)
+                .ToList();
+            foreach (FlashCardEntry a in affected)
+            {
+                if (a.CardNumber > cardNumber)
+                {
+                    a.CardNumber--;
+                    _dbContext.FlashCards.Update(a);
+                }
+            }
             _dbContext.SaveChanges();
             return true;
         }
