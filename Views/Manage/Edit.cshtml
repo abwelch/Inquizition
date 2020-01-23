@@ -10,59 +10,47 @@
             <hr />
         </div>
     </header>
-   
-@if (Model.FlashInquizitor.Count > 0)
-{
-    <div class="row justify-content-center">
-        <div class="col-10 col-sm-8 col-md-6 flip_container">
-            <div id="whole-card" class="flip m-0 p-0">
-                <div class="flip_front w-100">
-                    <div class="card">
-                        <div class="text-center card-body @Model.Color">
-                            <textarea readonly id="cardBody" rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.FlashInquizitor[0].CardBody</textarea>
+
+    @if (Model.FlashInquizitor.Count > 0)
+    {
+        <div class="row justify-content-center">
+            <div class="col-10 col-sm-8 col-md-6 flip_container">
+                <div id="whole-card" class="flip m-0 p-0">
+                    <div class="flip_front w-100">
+                        <div class="card">
+                            <div class="text-center card-body @Model.Color">
+                                <textarea readonly id="cardBody" rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.FlashInquizitor[0].CardBody</textarea>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="flip_back w-100">
-                    <div class="card">
-                        <div class="text-center card-body @Model.Color">
-                            <textarea readonly id="cardAnswer" rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.FlashInquizitor[0].CardAnswer</textarea>
+                    <div class="flip_back w-100">
+                        <div class="card">
+                            <div class="text-center card-body @Model.Color">
+                                <textarea readonly id="cardAnswer" rows="6" class="form-control text-center" style="display: block; height: 100%; font-size:x-large;">@Model.FlashInquizitor[0].CardAnswer</textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row justify-content-center">
-        <button class="btn btn-primary p-4 mt-5" style="font-size:large;" onclick="FlipCurrent()">Flip</button>
-    </div>
-    <div class="row justify-content-end">
-        <button class="btn btn-primary p-3 mr-3" style="font-size:large;" onclick="NextCard()">Next</button>
-    </div>
+        <div class="row justify-content-center">
+            <button class="btn btn-primary p-4 mt-5" style="font-size:large;" onclick="FlipCurrent()">Flip</button>
+        </div>
+        <div class="row justify-content-end">
+            <button class="btn btn-primary p-3 mr-3" style="font-size:large;" onclick="NextCard()">Next</button>
+        </div>
 
-    <div class="row justify-content-center">
-        <a id="add" asp-controller="Manage" asp-action="AddSpecific"
-           asp-route-inquizitor="@Model.Title" asp-route-cardNumber="1"
-           class="btn btn-success mb-5">
-            Create New
-        </a>
-    </div>
-    <div class="row justify-content-center">
-        <a id="edit" asp-controller="Manage" asp-action="EditSpecific"
-           asp-route-inquizitor="@Model.Title" asp-route-cardNumber="1"
-           class="btn btn-warning mb-5">
-            Edit Current
-        </a>
-    </div>
+        <div class="row justify-content-center">
+            <a id="add" href="/Manage/CreateSpecific?inquizitor=@Model.Title&cardNumber=1" class="btn btn-success mb-5">Create New</a>
+        </div>
+        <div class="row justify-content-center">
+            <a id="edit" href="/Manage/EditSpecific?inquizitor=@Model.Title&cardNumber=1" class="btn btn-warning mb-5">Edit Current</a>
+        </div>
 
-    <div class="row justify-content-center">
-        <a id="delete" asp-controller="Manage" asp-action="DeleteSpecific"
-           asp-route-inquizitor="@Model.Title" asp-route-cardNumber="1"
-           class="btn btn-danger mb-5">
-            Delete Current
-        </a>
-    </div>
-}
+        <div class="row justify-content-center">
+            <a id="delete" href="/Manage/DeleteSpecific?inquizitor=@Model.Title&cardNumber=1" class="btn btn-danger mb-5">Delete Current</a>
+        </div>
+    }
 </section>
 
 <script src="~/js/site.js" asp-append-version="true"></script>
@@ -83,20 +71,21 @@
     }
 
     function NextCard() {
-        var currentIndex = cardBodies.indexOf(document.getElementById("cardBody").value);
-        if ((currentIndex + 1) == @Model.FlashInquizitor.Count) {
+        var currentIndex = cardBodies.indexOf(document.getElementById("cardBody").value) + 1;
+        if (currentIndex == @Model.FlashInquizitor.Count) {
             document.getElementById("cardBody").value = cardBodies[0];
             document.getElementById("cardAnswer").value = cardAnswers[0];
-            document.getElementById("add").setAttribute("asp-route-cardNumber", "1");
-            document.getElementById("edit").setAttribute("asp-route-cardNumber", "1");
-            document.getElementById("delete").setAttribute("asp-route-cardNumber", "1");
+            document.getElementById("add").setAttribute("href", "/Manage/CreateSpecific?inquizitor=@Model.Title&cardNumber=1");
+            document.getElementById("edit").setAttribute("href", "/Manage/EditSpecific?inquizitor=@Model.Title&cardNumber=1");
+            document.getElementById("delete").setAttribute("href", "/Manage/DeleteSpecific?inquizitor=@Model.Title&cardNumber=1");
         }
         else {
-            document.getElementById("cardBody").value = cardBodies[(currentIndex+1)];
-            document.getElementById("cardAnswer").value = cardAnswers[(currentIndex + 1)];
-            document.getElementById("add").setAttribute("asp-route-cardNumber", (currentIndex + 1).toString());
-            document.getElementById("edit").setAttribute("asp-route-cardNumber", (currentIndex + 1).toString());
-            document.getElementById("delete").setAttribute("asp-route-cardNumber", (currentIndex + 1).toString());
+            document.getElementById("cardBody").value = cardBodies[currentIndex];
+            document.getElementById("cardAnswer").value = cardAnswers[currentIndex];
+            currentIndex++;
+            document.getElementById("add").setAttribute("href", "/Manage/CreateSpecific?inquizitor=@Model.Title&cardNumber=" + currentIndex.toString());
+            document.getElementById("edit").setAttribute("href", "/Manage/EditSpecific?inquizitor=@Model.Title&cardNumber=" + currentIndex.toString());
+            document.getElementById("delete").setAttribute("href", "/Manage/DeleteSpecific?inquizitor=@Model.Title&cardNumber=" + currentIndex.toString());
         }
     }
 </script>
